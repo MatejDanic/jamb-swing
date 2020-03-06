@@ -4,21 +4,21 @@ import java.util.Random;
 
 public class Dice {
 	
-	private boolean keep;
+	private boolean reserved;
 	private Random rand;
 	private int currNum;
 	
 	public Dice() {
-		this.keep = false;
+		this.reserved = false;
 		this.rand = new Random();
 	}
 
-	public boolean iskeep() {
-		return keep;
+	public boolean isReserved() {
+		return reserved;
 	}
 
-	public void setkeep(boolean keep) {
-		this.keep = keep;
+	public void setReserved(boolean reserved) {
+		this.reserved = reserved;
 	}
 
 	public int getCurrNum() {

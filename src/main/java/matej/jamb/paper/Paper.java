@@ -3,6 +3,9 @@ package matej.jamb.paper;
 import java.util.ArrayList;
 import java.util.List;
 
+import matej.jamb.paper.row.Row;
+import matej.jamb.paper.row.RowType;
+
 public class Paper {
 	
 	private List<Row> rowList;
@@ -17,21 +20,21 @@ public class Paper {
 
 	public Row getRow(RowType type) {
 		for (Row row : rowList) {
-			if (row.getType() == type) {
+			if (row.getRowType() == type) {
 				return row;
 			}
 		}
 		return null;
 	}
 	
-	public boolean isPaperFinished() {
+	public boolean isDone() {
 		for (Row row : rowList) {
-			if (!row.isRowFinished()) return false;
+			if (!row.isDone()) return false;
 		}
 		return true;
 	}
 
-	public int izracunajRezultat() {
+	public int getScore() {
 		int score = 0;
 		for (Row row : rowList) {
 			score += row.getScore();
@@ -39,13 +42,17 @@ public class Paper {
 		return score;
 	}
 	
-	public void ispisi() {
+	public String toString() {
+		String string = "";
 		for (int i = 0; i < 13; i++) {
-			System.out.println("|" + downward.zapis[i] + "| |" + upward.zapis[i] + "| |" + downwardUpward.zapis[i] + "| |" + announce.zapis[i] + "|");
+			for (Row row : rowList) {
+				string += ("|" + row.getBoxList().get(i).getValue() + "| ");
+			}
 			if (i == 5 || i == 7 || i == 12) {
-				System.out.println("---------------");
+				string += ("\n---------------");
 			}
 		}
+		return string;
 	}
 	
 }
