@@ -11,7 +11,7 @@ public class Row {
 	private List<Box> boxList;
 	private boolean done;
 	private RowType rowType;
-	private int UPWARDperScore, middleScore, lowerScore;
+	private int upperScore, middleScore, lowerScore;
 
 	public Boolean isDone() {
 		return done;
@@ -28,7 +28,7 @@ public class Row {
 	public Row(RowType rowType) {
 		this.boxList = new ArrayList<>();
 		this.rowType = rowType;
-		this.UPWARDperScore = 0;
+		this.upperScore = 0;
 		this.middleScore = 0;
 		this.lowerScore = 0;
 		initializeBoxes();
@@ -92,12 +92,12 @@ public class Row {
 		}
 	}
 
-	public int getUPWARDperScore() {
-		int UPWARDperScore = 0;
+	public int getUpperScore() {
+		int upperScore = 0;
 		for (int i = 0; i < 6; i++) {
-			UPWARDperScore += boxList.get(i).getValue();
+			upperScore += boxList.get(i).getValue();
 		}
-		return UPWARDperScore >= 60 ? UPWARDperScore : UPWARDperScore + 30;
+		return upperScore < 60 ? upperScore : upperScore + 30;
 	}
 
 	public int getMiddleScore() {
@@ -115,10 +115,10 @@ public class Row {
 	}
 
 	public int getScore() {
-		UPWARDperScore = getUPWARDperScore();
+		upperScore = getUpperScore();
 		middleScore = getMiddleScore();
 		lowerScore = getLowerScore();
-		return (UPWARDperScore + middleScore + lowerScore);
+		return (upperScore + middleScore + lowerScore);
 	}
 
 	public void writeDown(List<Dice> diceList, int boxNum) {
@@ -126,9 +126,8 @@ public class Row {
 		int score = 0;
 		if (boxNum >= 0 && boxNum <= 5) {
 			for (Dice k : diceList) {
-				int currNum = k.getCurrNum();
-				if (currNum == boxNum + 1) {
-					score += currNum;
+				if (k.getCurrNum() == boxNum + 1) {
+					score += k.getCurrNum();
 				}
 			}
 		} else if (boxNum >= 6 && boxNum <= 7) {
@@ -142,13 +141,8 @@ public class Row {
 //		System.out.println("score: " + score);
 //		boxList.get(boxNum).setAvailable(false);
 
-		if (boxNum > 0 && boxNum < 12) {
-			if (rowType == RowType.DOWNWARD) {
-				boxList.get(boxNum + 1).setAvailable(true);
-			} else if(rowType == RowType.UPWARD) {
-				boxList.get(boxNum - 1).setAvailable(true);
-			}
-		}
+		if (boxNum < 12 && rowType == RowType.DOWNWARD) boxList.get(boxNum + 1).setAvailable(true);
+		if (boxNum > 0 && rowType == RowType.UPWARD) boxList.get(boxNum - 1).setAvailable(true);
 	}
 
 	public int checkCategory(int boxNum, List<Dice> diceList) {
@@ -229,9 +223,9 @@ public class Row {
 					score += d2.getCurrNum();
 				}
 			}
-			if (num == 2) {
+			if (num == 2 && scoreTwo != 0) {
 				scoreTwo = score;
-			} else if (num == 3) {
+			} else if (num == 3 && scoreThree != 0) {
 				scoreThree = score;
 			}
 			if (scoreTwo != 0 && scoreThree != 0) {

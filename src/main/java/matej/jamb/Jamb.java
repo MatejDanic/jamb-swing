@@ -39,7 +39,7 @@ public class Jamb {
 				for (Dice dice : diceList) {
 					dice.setReserved(false);
 				}
-				System.out.println(player.getName() + "\n" + player.getPaper());
+				System.out.println("\n" + player + "\n\n" + player.getPaper());
 				playTurn(player);
 			}
 		}
@@ -51,12 +51,13 @@ public class Jamb {
 		int winnerScore = 0;
 		int index = 0;
 		for (Player player : playerList) {
-			index++;
 			int score = player.getPaper().getScore();
+			System.out.println(player + ": " + score);
 			if (score > winnerScore) {
 				winnerScore = score;
 				winnerIndex = index;
 			}
+			index++;
 		}
 		for (Player player : playerList) {
 			if (player == playerList.get(winnerIndex)) System.out.println("Winner: " + player + "!");
@@ -73,9 +74,11 @@ public class Jamb {
 		while(diceThrows <= Constants.NUM_OF_THROWS) {
 			int input = 0;
 			if (diceThrows == 0) {
-				input = ic.checkInput(1, 1, "option number (1 - throw dice)");
+//				input = ic.checkInput(1, 1, "option number (1 - throw dice)");
+				input = 1;
 			} else if (diceThrows == 1 && announcement.isEmpty()) {
-				input = ic.checkInput(1, 4, "option number (1 - throw dice, 2 - keep some dice, 3 - write down, 4 - announce)");
+//				input = ic.checkInput(1, 4, "option number (1 - throw dice, 2 - keep some dice, 3 - write down, 4 - announce)");
+				input = 3;
 			} else if (diceThrows == Constants.NUM_OF_THROWS) {
 				input = ic.checkInput(3, 3, "option number (3 - write down)");
 			} else {
@@ -88,9 +91,9 @@ public class Jamb {
 				break;
 			case 2:
 				System.out.println(diceList);
-				List<Integer> diceForKeep = ic.checkInput(numOfDice, "dice that you want to keep (separated by comma)");
+				List<Integer> diceForKeep = ic.checkInput(numOfDice, "dice that you want to keep (select already kept dice to unkeep)");
 				for (int diceIndex : diceForKeep) {
-					diceList.get(diceIndex-1).setReserved(true);
+					diceList.get(diceIndex-1).setReserved(!diceList.get(diceIndex-1).getReserved());
 				}
 				System.out.println(diceList);
 				break;
@@ -100,7 +103,8 @@ public class Jamb {
 				for (Integer boxIndex : availBoxMap.keySet()) {
 					System.out.println(boxIndex + ". " + availBoxMap.get(boxIndex).toString());
 				}
-				input = ic.checkInput(1, availBoxMap.size(), "index of box");
+//				input = ic.checkInput(1, availBoxMap.size(), "index of box");
+				input = 1;
 				rowType = RowType.valueOf(availBoxMap.get(input).split(" ")[0]);
 				boxType = BoxType.valueOf(availBoxMap.get(input).split(" ")[1]);
 				player.getPaper().getRow(rowType).writeDown(diceList, player.getPaper().getRow(rowType).getBox(boxType).getId());

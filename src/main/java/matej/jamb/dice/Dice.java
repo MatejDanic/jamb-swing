@@ -34,4 +34,8 @@ public class Dice {
 		if (reserved) return "|" + currNum + "|";
 		else return "" + currNum;
 	}
+
+	public boolean getReserved() {
+		return reserved;
+	}
 }

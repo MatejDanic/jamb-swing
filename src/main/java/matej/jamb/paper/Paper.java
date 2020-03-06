@@ -42,6 +42,7 @@ public class Paper {
 		int score = 0;
 		for (Row row : rowList) {
 			score += row.getScore();
+//			System.out.println("row score: " + row.getScore());
 		}
 		return score;
 	}
@@ -54,11 +55,21 @@ public class Paper {
 				if (!row.getBoxList().get(i).isWritten()) string += "|-| ";
 				else string += ("|" + row.getBoxList().get(i).getValue() + "| ");
 			}
-			if (i == 5 || i == 7 || i == 12) {
-				string += ("\n---------------");
+			
+			if (i == 5 || i == 7 || i == 12) string += "\n";
+			for (Row row : rowList) {
+				if (i == 5) {
+					//					string += "\n---------------";
+					string += "|" + row.getUpperScore() + "| ";
+					//					string += "\n---------------";
+				}  else if (i == 7) {
+					string += "|" + row.getMiddleScore() + "| ";
+				} else if (i == 12) {
+					string += "|" + row.getLowerScore() + "| ";
+				}
 			}
 		}
-		return string;
+		return string + "\nScore: " + getScore();
 	}
 
 	public List<Row> getRowList() {
