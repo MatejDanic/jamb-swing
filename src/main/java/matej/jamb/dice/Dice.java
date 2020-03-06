@@ -29,4 +29,9 @@ public class Dice {
 		currNum = rand.nextInt(6)+1;
 		return (currNum);
 	}
+	
+	public String toString() {
+		if (reserved) return "|" + currNum + "|";
+		else return "" + currNum;
+	}
 }

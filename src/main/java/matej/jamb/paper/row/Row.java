@@ -3,7 +3,7 @@ package matej.jamb.paper.row;
 import java.util.ArrayList;
 import java.util.List;
 
-import matej.jamb.Constants;
+import matej.jamb.constants.Constants;
 import matej.jamb.dice.Dice;
 
 public class Row {
@@ -11,7 +11,7 @@ public class Row {
 	private List<Box> boxList;
 	private boolean done;
 	private RowType rowType;
-	private int upperScore, middleScore, lowerScore;
+	private int UPWARDperScore, middleScore, lowerScore;
 
 	public Boolean isDone() {
 		return done;
@@ -24,11 +24,11 @@ public class Row {
 	public List<Box> getBoxList() {
 		return boxList;
 	}
-	
+
 	public Row(RowType rowType) {
 		this.boxList = new ArrayList<>();
 		this.rowType = rowType;
-		this.upperScore = 0;
+		this.UPWARDperScore = 0;
 		this.middleScore = 0;
 		this.lowerScore = 0;
 		initializeBoxes();
@@ -86,26 +86,24 @@ public class Row {
 				break;
 			}
 			if (rowType == RowType.ANYDIR || rowType == RowType.ANNOUNCE) available = true;
-			Box box = new Box(boxType);
+			Box box = new Box(boxType, i);
 			box.setAvailable(available);
 			boxList.add(box);
 		}
 	}
 
-	public int getUpperScore() {
-		int upperScore = 0;
+	public int getUPWARDperScore() {
+		int UPWARDperScore = 0;
 		for (int i = 0; i < 6; i++) {
-			upperScore += boxList.get(i).getValue();
+			UPWARDperScore += boxList.get(i).getValue();
 		}
-		return upperScore >= 60 ? upperScore : upperScore + 30;
+		return UPWARDperScore >= 60 ? UPWARDperScore : UPWARDperScore + 30;
 	}
 
 	public int getMiddleScore() {
 		int middleScore;
-		if (boxList.get(6).isavailable() || boxList.get(7).isavailable() || boxList.get(0).isavailable()) middleScore = 0;
-		else {
-			middleScore = (boxList.get(6).getValue() - boxList.get(7).getValue()) * boxList.get(0).getValue();
-		}
+		if (boxList.get(6).isAvailable() || boxList.get(7).isAvailable() || boxList.get(0).isAvailable()) middleScore = 0;
+		else middleScore = (boxList.get(6).getValue() - boxList.get(7).getValue()) * boxList.get(0).getValue();
 		return middleScore;
 	}
 	public int getLowerScore() {
@@ -117,13 +115,14 @@ public class Row {
 	}
 
 	public int getScore() {
-		upperScore = getUpperScore();
+		UPWARDperScore = getUPWARDperScore();
 		middleScore = getMiddleScore();
 		lowerScore = getLowerScore();
-		return (upperScore + middleScore + lowerScore);
+		return (UPWARDperScore + middleScore + lowerScore);
 	}
 
 	public void writeDown(List<Dice> diceList, int boxNum) {
+//		System.out.println(boxNum);
 		int score = 0;
 		if (boxNum >= 0 && boxNum <= 5) {
 			for (Dice k : diceList) {
@@ -140,7 +139,8 @@ public class Row {
 			score = checkCategory(boxNum, diceList);
 		}
 		boxList.get(boxNum).setValue(score);
-		boxList.get(boxNum).setAvailable(false);
+//		System.out.println("score: " + score);
+//		boxList.get(boxNum).setAvailable(false);
 
 		if (boxNum > 0 && boxNum < 12) {
 			if (rowType == RowType.DOWNWARD) {
@@ -150,124 +150,142 @@ public class Row {
 			}
 		}
 	}
-	
+
 	public int checkCategory(int boxNum, List<Dice> diceList) {
 		int categoryScore = 0;
 		switch (boxNum) {
 		case 8:
-			categoryScore = checkTrips(diceList);
+			categoryScore = checkTrips(diceList) == 0 ? 0 : checkTrips(diceList) + Constants.BONUS_TRIP;
+			break;
 		case 9:
 			categoryScore = checkStraight(diceList);
+			break;
 		case 10:
-			categoryScore = checkFull(diceList);
+			categoryScore = checkFull(diceList) == 0 ? 0 : checkFull(diceList) + Constants.BONUS_FULL;
+			break;
 		case 11:
-			categoryScore = checkPoker(diceList);
+			categoryScore = checkPoker(diceList) == 0 ? 0 : checkPoker(diceList) + Constants.BONUS_POKER;
+			break;
 		case 12:
-			categoryScore = checkJamb(diceList);
+			categoryScore = checkJamb(diceList) == 0 ? 0 : checkJamb(diceList) + Constants.BONUS_JAMB;
+			break;
+		default:
+			categoryScore = 0;
+			break;
 		}
 		return categoryScore;
 	}
 
 	public int checkTrips(List<Dice> diceList) {
-		int rezultat = 0;
-		for (Dice k1 : diceList) {
-			int broj = 0;
-			int score = k1.getCurrNum();
-			for (Dice k2 : diceList) {
-				if (k1 != k2 && k1.getCurrNum() == k2.getCurrNum()) {
-					broj++;
-					score += k2.getCurrNum();
+		int tripScore = 0;
+		for (Dice d1 : diceList) {
+			int num = 1;
+			int score = d1.getCurrNum();
+			for (Dice d2 : diceList) {
+				if (d1 != d2 && d1.getCurrNum() == d2.getCurrNum()) {
+					num++;
+					if (num <= 3) score += d2.getCurrNum();
 				}
 			}
-			if (broj == 3) {
-				rezultat = score;
+//			System.out.println(score + " " + num);
+			if (num == 3) {
+				tripScore = score;
 				break;
 			}
 		}
-		return rezultat;
+		return tripScore;
 	}
 
 	public int checkStraight(List<Dice> diceList) {
-		int rezultat = 0;
-		List<Integer> skala = new ArrayList<>();
-		skala.add(2);
-		skala.add(3);
-		skala.add(4);
-		skala.add(5);
-		List<Integer> brojevi = new ArrayList<>();
+		int straightScore = 0;
+		List<Integer> straight = new ArrayList<>();
+		straight.add(2);
+		straight.add(3);
+		straight.add(4);
+		straight.add(5);
+		List<Integer> numbers = new ArrayList<>();
 		for (Dice k : diceList) {
-			brojevi.add(k.getCurrNum());
+			numbers.add(k.getCurrNum());
 		}
-		if (brojevi.containsAll(skala)){
-			if (brojevi.contains(1)) {
-				rezultat = 35;
-			} else if (brojevi.contains(6))
-				rezultat = 45;
+		if (numbers.containsAll(straight)){
+			if (numbers.contains(1)) {
+				straightScore = 35;
+			} else if (numbers.contains(6))
+				straightScore = 45;
 		}
-		return rezultat;
+		return straightScore;
 	}
 
 	public int checkFull(List<Dice> diceList) {
-		int rezultat = 0;
-		int score2 = 0; 
-		int score3 = 0;
-		for (Dice k1 : diceList) {
-			int broj = 0;
-			int score = k1.getCurrNum();
-			for (Dice k2 : diceList) {
-				if (k1 != k2 && k1.getCurrNum() == k2.getCurrNum()) {
-					broj++;
-					score += k2.getCurrNum();
+		int fullScore = 0;
+		int scoreTwo = 0; 
+		int scoreThree = 0;
+		for (Dice d1 : diceList) {
+			int num = 1;
+			int score = d1.getCurrNum();
+			for (Dice d2 : diceList) {
+				if (d1 != d2 && d1.getCurrNum() == d2.getCurrNum()) {
+					num++;
+					score += d2.getCurrNum();
 				}
 			}
-			if (broj == 2) {
-				score2 = score;
-			} else if (broj == 3) {
-				score3 = score;
+			if (num == 2) {
+				scoreTwo = score;
+			} else if (num == 3) {
+				scoreThree = score;
 			}
-			if (score2 != 0 && score3 != 0) {
-				rezultat = score2 + score3;
+			if (scoreTwo != 0 && scoreThree != 0) {
+				fullScore = scoreTwo + scoreThree;
 				break;
 			}
 		}
-		return rezultat;
+		return fullScore;
 	}
 
 	public int checkPoker(List<Dice> diceList) {
-		int rezultat = 0;
-		for (Dice k1 : diceList) {
-			int broj = 0;
-			int score = k1.getCurrNum();
-			for (Dice k2 : diceList) {
-				if (k1 != k2 && k1.getCurrNum() == k2.getCurrNum()) {
-					broj++;
-					score += k2.getCurrNum();
+		int pokerScore = 0;
+		for (Dice d1 : diceList) {
+			int num = 1;
+			int score = d1.getCurrNum();
+			for (Dice d2 : diceList) {
+				if (d1 != d2 && d1.getCurrNum() == d2.getCurrNum()) {
+					num++;
+					if (num <= 4) score += d2.getCurrNum();
 				}
 			}
-			if (broj == 4) {
-				rezultat = score;
+			if (num == 4) {
+				pokerScore = score;
 				break;
 			}
 		}
-		return rezultat;
+		return pokerScore;
 	}
 
 	public int checkJamb(List<Dice> diceList) {
-		int rezultat = 0;
-		for (Dice k1 : diceList) {
-			int broj = 0;
-			int score = k1.getCurrNum();
-			for (Dice k2 : diceList) {
-				if (k1 != k2 && k1.getCurrNum() == k2.getCurrNum()) {
-					broj++;
-					score += k2.getCurrNum();
+		int jambScore = 0;
+		for (Dice d1 : diceList) {
+			int num = 0;
+			int score = d1.getCurrNum();
+			for (Dice d2 : diceList) {
+				if (d1 != d2 && d1.getCurrNum() == d2.getCurrNum()) {
+					num++;
+					score += d2.getCurrNum();
 				}
 			}
-			if (broj == 5) {
-				rezultat = score;
+			if (num == 5) {
+				jambScore = score;
 				break;
 			}
 		}
-		return rezultat;
+		return jambScore;
+	}
+
+	public Box getBox(BoxType boxType) {
+		for (Box box : boxList) {
+			if (box.getBoxType() == boxType) {
+				return box;
+			}
+		}
+		return null;
 	}
 }

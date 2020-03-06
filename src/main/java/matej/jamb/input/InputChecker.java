@@ -1,5 +1,7 @@
 package matej.jamb.input;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class InputChecker {
@@ -32,5 +34,23 @@ public class InputChecker {
 			break;
 		}
 		return input;
+	}
+
+	public List<Integer> checkInput(int numOfDice, String string) {
+		String[] input;
+		List<Integer> diceIndexList = new ArrayList<>();
+		System.out.println("Enter " + string + ":\n");
+		while(sc.hasNextLine()) {
+			try {
+				input = sc.nextLine().split(",");
+				for (String index : input) {
+					diceIndexList.add(Integer.parseInt(index));
+				}
+				if (diceIndexList.size() != 0) break;
+			} catch (Exception e) {
+//				e.printStackTrace();
+			}
+		}
+		return diceIndexList;
 	}
 }

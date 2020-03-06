@@ -3,13 +3,16 @@ package matej.jamb.paper.row;
 public class Box {
 	
 	private int value;
-	private BoxType type;
-	private boolean available;
+	private BoxType boxType;
+	private boolean available, written;
+	private int id;
 	
-	public Box(BoxType type) {
+	public Box(BoxType boxType, int id) {
+		this.id = id;
 		this.value = 0;
 		this.available = false;
-		this.type = type;
+		this.written = false;
+		this.boxType = boxType;
 	}
 
 	public int getValue() {
@@ -18,21 +21,35 @@ public class Box {
 
 	public void setValue(int value) {
 		this.value = value;
+		this.available = false;
+		this.written = true;
 	}
 
-	public BoxType getType() {
-		return type;
+	public BoxType getBoxType() {
+		return boxType;
 	}
 
-	public void setType(BoxType type) {
-		this.type = type;
+	public void setBoxType(BoxType boxType) {
+		this.boxType = boxType;
 	}
 
-	public boolean isavailable() {
+	public boolean isAvailable() {
 		return available;
 	}
 
 	public void setAvailable(boolean available) {
 		this.available = available;
-	}	
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public boolean isWritten() {
+		return written;
+	}
+	
+	public void setWritten(boolean written) {
+		this.written = written;
+	}
 }

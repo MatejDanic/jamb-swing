@@ -2,10 +2,14 @@ package matej.jamb;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
+import matej.jamb.constants.Constants;
 import matej.jamb.dice.Dice;
 import matej.jamb.input.InputChecker;
+import matej.jamb.paper.row.BoxType;
+import matej.jamb.paper.row.RowType;
 import matej.jamb.player.Player;
 
 public class Jamb {
@@ -13,12 +17,11 @@ public class Jamb {
 	private List<Player> playerList;
 	private List<Dice> diceList;
 	private InputChecker ic;
+	private int numOfDice;
 
 	public void start() {
 		ic = new InputChecker(new Scanner(System.in));
-		
-		
-		int numOfDice = ic.checkInput(5, 6, "number of dice");
+		numOfDice = ic.checkInput(5, 6, "number of dice");
 		diceList = new ArrayList<>();
 		for (int i = 0; i < numOfDice; i++) {
 			diceList.add(new Dice());
@@ -42,7 +45,7 @@ public class Jamb {
 		}
 		calculateWinner();
 	}
-	
+
 	public void calculateWinner() {
 		int winnerIndex = 0;
 		int winnerScore = 0;
@@ -62,30 +65,69 @@ public class Jamb {
 	}
 
 	public void playTurn(Player player) {
-		for (int j = 0; j < Constants.NUM_OF_THROWS; j++) {
+		int diceThrows = 0;
+		String announcement = "";
+		Map<Integer, String> availBoxMap;
+		RowType rowType;
+		BoxType boxType;
+		while(diceThrows <= Constants.NUM_OF_THROWS) {
 			int input = 0;
-			if (j == 0) {
+			if (diceThrows == 0) {
 				input = ic.checkInput(1, 1, "option number (1 - throw dice)");
-			} else if (j == 1) {
-				input = ic.checkInput(1, 4, "option number (1 - throw dice, 2 - keep some dice, 3 - writeDown, 4 - announce)");
+			} else if (diceThrows == 1 && announcement.isEmpty()) {
+				input = ic.checkInput(1, 4, "option number (1 - throw dice, 2 - keep some dice, 3 - write down, 4 - announce)");
+			} else if (diceThrows == Constants.NUM_OF_THROWS) {
+				input = ic.checkInput(3, 3, "option number (3 - write down)");
 			} else {
-				input = ic.checkInput(1, 3, "option number (1 - throw dice, 2 - keep some dice, 3 - writeDown");
+				input = ic.checkInput(1, 3, "option number (1 - throw dice, 2 - keep some dice, 3 - write down");
 			}
 			switch (input) {
 			case 1:
-				for (Dice dice : diceList) {
-					if (dice.isReserved()) System.out.println("|" + dice.getCurrNum() + "| ");
-					else  System.out.printf(dice.throwDice() + " ");
-				}
+				throwDice(diceList);
+				diceThrows++;
 				break;
-			case 2: 
+			case 2:
+				System.out.println(diceList);
+				List<Integer> diceForKeep = ic.checkInput(numOfDice, "dice that you want to keep (separated by comma)");
+				for (int diceIndex : diceForKeep) {
+					diceList.get(diceIndex-1).setReserved(true);
+				}
+				System.out.println(diceList);
 				break;
 			case 3:
-				break;
-			default:
+				System.out.println("\nAvailable boxes are:\n");
+				availBoxMap = player.getPaper().getAvailBoxMap(diceThrows, announcement);
+				for (Integer boxIndex : availBoxMap.keySet()) {
+					System.out.println(boxIndex + ". " + availBoxMap.get(boxIndex).toString());
+				}
+				input = ic.checkInput(1, availBoxMap.size(), "index of box");
+				rowType = RowType.valueOf(availBoxMap.get(input).split(" ")[0]);
+				boxType = BoxType.valueOf(availBoxMap.get(input).split(" ")[1]);
+				player.getPaper().getRow(rowType).writeDown(diceList, player.getPaper().getRow(rowType).getBox(boxType).getId());
+				System.out.println(player.getPaper());
+				return;
+			case 4:
+				System.out.println("\nAvailable announcements are:\n");
+				announcement = "ANNOUNCE";
+				availBoxMap = player.getPaper().getAvailBoxMap(diceThrows, announcement);
+				for (Integer boxIndex : availBoxMap.keySet()) {
+					System.out.println(boxIndex + ". " + availBoxMap.get(boxIndex).toString());
+				}
+				System.out.println(diceList);
+				input = ic.checkInput(1, availBoxMap.size(), "index of announcement");
+				announcement += " " + BoxType.valueOf(availBoxMap.get(input).split(" ")[1]);
 				break;
 			}
-			System.out.println("\n");
 		}
+
+		System.out.println("\n");
+	}
+
+	private void throwDice(List<Dice> diceList2) {
+		System.out.println("\nDICE RESULTS:");
+		for (Dice dice : diceList) {
+			if (!dice.isReserved()) dice.throwDice();
+		}
+		System.out.println(diceList);
 	}
 }
