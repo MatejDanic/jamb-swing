@@ -2,6 +2,7 @@ package matej.jamb;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import matej.jamb.dice.Dice;
 import matej.jamb.input.InputChecker;
@@ -11,17 +12,22 @@ public class Jamb {
 
 	private List<Player> playerList;
 	private List<Dice> diceList;
+	private InputChecker ic;
 
 	public void start() {
-		int numOfDice = InputChecker.checkInput(5, 6, "number of dice");
+		ic = new InputChecker(new Scanner(System.in));
+		
+		
+		int numOfDice = ic.checkInput(5, 6, "number of dice");
 		diceList = new ArrayList<>();
 		for (int i = 0; i < numOfDice; i++) {
 			diceList.add(new Dice());
 		}
-		int numOfPlayers = InputChecker.checkInput(1, 3, "number of players");
+		int numOfPlayers = ic.checkInput(1, 3, "number of players");
+
 		playerList = new ArrayList<>();
 		for (int i = 0; i < numOfPlayers; i++) {
-			String playerName = InputChecker.checkInput("player " + (i+1) + " name");
+			String playerName = ic.checkInput("player " + (i+1) + " name");
 			playerList.add(new Player(playerName));
 		}
 
@@ -59,26 +65,27 @@ public class Jamb {
 		for (int j = 0; j < Constants.NUM_OF_THROWS; j++) {
 			int input = 0;
 			if (j == 0) {
-				input = InputChecker.checkInput(1, 1, "option number (1 - throw dice)");
+				input = ic.checkInput(1, 1, "option number (1 - throw dice)");
 			} else if (j == 1) {
-				input = InputChecker.checkInput(1, 4, "option number (1 - throw dice, 2 - keep some dice, 3 - writeDown, 4 - announce)");
+				input = ic.checkInput(1, 4, "option number (1 - throw dice, 2 - keep some dice, 3 - writeDown, 4 - announce)");
 			} else {
-				input = InputChecker.checkInput(1, 2, "option number (1 - throw dice, 2 - keep some dice, 3 - writeDown");
+				input = ic.checkInput(1, 3, "option number (1 - throw dice, 2 - keep some dice, 3 - writeDown");
 			}
 			switch (input) {
 			case 1:
 				for (Dice dice : diceList) {
-					if (!dice.isReserved()) System.out.println("|" + dice.throwDice() + "| ");
-					else  System.out.println(dice.getCurrNum() + " ");
+					if (dice.isReserved()) System.out.println("|" + dice.getCurrNum() + "| ");
+					else  System.out.printf(dice.throwDice() + " ");
 				}
-				continue;
+				break;
 			case 2: 
-				continue;
+				break;
 			case 3:
-				continue;
+				break;
 			default:
-				continue;
+				break;
 			}
+			System.out.println("\n");
 		}
 	}
 }

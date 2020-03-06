@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class JambApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(JambApplication.class, args);
+//		SpringApplication.run(JambApplication.class, args);
 		Jamb jamb = new Jamb();
 		jamb.start();
 	}

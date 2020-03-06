@@ -42,47 +42,48 @@ public class Row {
 			case 0:
 				boxType = BoxType.ONES;
 				if (rowType == RowType.DOWNWARD) available = true;
-				continue;
+				break;
 			case 1:
 				boxType = BoxType.TWOS;
-				continue;
+				break;
 			case 2:
 				boxType = BoxType.THREES;
-				continue;
+				break;
 			case 3:
 				boxType = BoxType.FOURS;
-				continue;
+				break;
 			case 4:
 				boxType = BoxType.FIVES;
-				continue;
+				break;
 			case 5:
 				boxType = BoxType.SIXES;
-				continue;
+				break;
 			case 6:
 				boxType = BoxType.MAX;
-				continue;
+				break;
 			case 7:
 				boxType = BoxType.MIN;
-				continue;
+				break;
 			case 8:
 				boxType = BoxType.TRIPS;
-				continue;
+				break;
 			case 9:
 				boxType = BoxType.STRAIGHT;
-				continue;
+				break;
 			case 10:
 				boxType = BoxType.FULL;
-				continue;
+				break;
 			case 11:
 				boxType = BoxType.POKER;
-				continue;
+				break;
 			case 12:
 				boxType = BoxType.JAMB;
 				if (rowType == RowType.UPWARD) available = true;
-				continue;
+				break;
 			default:
 				boxType = BoxType.ONES;
-				available = false;
+				available = true;
+				break;
 			}
 			if (rowType == RowType.ANYDIR || rowType == RowType.ANNOUNCE) available = true;
 			Box box = new Box(boxType);

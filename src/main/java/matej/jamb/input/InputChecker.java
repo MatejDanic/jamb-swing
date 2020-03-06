@@ -3,29 +3,34 @@ package matej.jamb.input;
 import java.util.Scanner;
 
 public class InputChecker {
-	
-	public static int checkInput(int min, int max, String string) {
-		Scanner sc = new Scanner(System.in);
+
+	private Scanner sc;
+
+	public InputChecker(Scanner sc) {
+		this.sc = new Scanner(System.in);
+	}
+
+	public int checkInput(int min, int max, String string) {
 		int input = 0;
-		while(true) {
-			System.out.println("Enter " + string + ".\n[" + min + "-" + max + "]\n");
+		System.out.println("Enter " + string + ":\n[" + min + "-" + max + "]\n");
+		while (sc.hasNextLine()) {
 			try {
 				input = Integer.parseInt(sc.nextLine());
+				if (input >= min && input <= max) break;
 			} catch (Exception e) {
 //				e.printStackTrace();
-				continue;
 			}
-			if (input >= min && input <= max) break;
 		}
-		sc.close();
 		return input;
 	}
-	
-	public static String checkInput(String string) {
-		Scanner sc = new Scanner(System.in);
+
+	public String checkInput(String string) {
+		String input = "";
 		System.out.println("Enter " + string + ":\n");
-		String input = sc.nextLine();
-		sc.close();
+		while(sc.hasNextLine()) {
+			input = sc.nextLine();
+			break;
+		}
 		return input;
 	}
 }

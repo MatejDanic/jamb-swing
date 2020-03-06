@@ -45,6 +45,7 @@ public class Paper {
 	public String toString() {
 		String string = "";
 		for (int i = 0; i < 13; i++) {
+			string += "\n";
 			for (Row row : rowList) {
 				string += ("|" + row.getBoxList().get(i).getValue() + "| ");
 			}
