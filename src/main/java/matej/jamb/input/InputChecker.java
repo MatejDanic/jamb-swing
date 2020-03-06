@@ -44,7 +44,7 @@ public class InputChecker {
 			try {
 				input = sc.nextLine().split(",");
 				for (String index : input) {
-					diceIndexList.add(Integer.parseInt(index));
+					if (Integer.parseInt(index) >= 1 && Integer.parseInt(index) <= numOfDice) diceIndexList.add(Integer.parseInt(index));
 				}
 				if (diceIndexList.size() != 0) break;
 			} catch (Exception e) {

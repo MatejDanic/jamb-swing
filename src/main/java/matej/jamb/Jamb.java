@@ -102,9 +102,10 @@ public class Jamb {
 					System.out.println(boxIndex + ". " + availBoxMap.get(boxIndex).toString());
 				}
 				input = ic.checkInput(1, availBoxMap.size(), "index of box");
-				input = 1;
+//				input = 1;
 				rowType = RowType.valueOf(availBoxMap.get(input).split(" ")[0]);
 				boxType = BoxType.valueOf(availBoxMap.get(input).split(" ")[1]);
+//				System.out.println(rowType + " --- " + boxType);
 				player.getPaper().getRow(rowType).writeDown(diceList, player.getPaper().getRow(rowType).getBox(boxType).getId());
 				System.out.println(player.getPaper());
 				return;
