@@ -48,7 +48,10 @@ public class Paper {
 	}
 
 	public String toString() {
-		String string = " |   A   |A   ann\n V   |   V|\n";
+		String string = "\n---------------" + 
+						"\n |   A   |A  a" + 
+						"\n V   |   V|  n"+
+						"\n---------------";
 		for (int i = 0; i < 13; i++) {
 			string += "\n";
 			for (Row row : rowList) {
@@ -56,20 +59,25 @@ public class Paper {
 				else string += ("|" + row.getBoxList().get(i).getValue() + "| ");
 			}
 			
-			if (i == 5 || i == 7 || i == 12) string += "\n";
-			for (Row row : rowList) {
-				if (i == 5) {
-					//					string += "\n---------------";
-					string += "|" + row.getUpperScore() + "| ";
-					//					string += "\n---------------";
-				}  else if (i == 7) {
-					string += "|" + row.getMiddleScore() + "| ";
-				} else if (i == 12) {
-					string += "|" + row.getLowerScore() + "| ";
+			if (i == 5 || i == 7 || i == 12) {
+				string += "\n---------------\n";
+				for (Row row : rowList) {
+					if (i == 5) {
+						//					
+						string += "|" + row.getUpperScore() + "| ";
+						//					string += "\n---------------";
+					}  else if (i == 7) {
+						string += "|" + row.getMiddleScore() + "| ";
+					} else if (i == 12) {
+						string += "|" + row.getLowerScore() + "| ";
+					}
 				}
+				string += "\n---------------";
 			}
+			
+			
 		}
-		return string + "\nScore: " + getScore();
+		return string + "\nScore: " + getScore() + "\n";
 	}
 
 	public List<Row> getRowList() {
