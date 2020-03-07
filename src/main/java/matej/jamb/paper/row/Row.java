@@ -223,9 +223,9 @@ public class Row {
 					score += d2.getCurrNum();
 				}
 			}
-			if (num == 2 && scoreTwo != 0) {
+			if (num == 2) {
 				scoreTwo = score;
-			} else if (num == 3 && scoreThree != 0) {
+			} else if (num == 3) {
 				scoreThree = score;
 			}
 			if (scoreTwo != 0 && scoreThree != 0) {
@@ -258,7 +258,7 @@ public class Row {
 	public int checkJamb(List<Dice> diceList) {
 		int jambScore = 0;
 		for (Dice d1 : diceList) {
-			int num = 0;
+			int num = 1;
 			int score = d1.getCurrNum();
 			for (Dice d2 : diceList) {
 				if (d1 != d2 && d1.getCurrNum() == d2.getCurrNum()) {

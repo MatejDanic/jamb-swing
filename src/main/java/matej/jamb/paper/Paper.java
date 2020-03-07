@@ -48,31 +48,31 @@ public class Paper {
 	}
 
 	public String toString() {
-		String string = "\n---------------" + 
-						"\n |   A   |A  a" + 
-						"\n V   |   V|  n"+
-						"\n---------------";
+		String string = "\n------------------" + 
+						"\n |    A    |A   a" + 
+						"\n V    |    V|   n"+
+						"\n------------------";
 		for (int i = 0; i < 13; i++) {
 			string += "\n";
 			for (Row row : rowList) {
-				if (!row.getBoxList().get(i).isWritten()) string += "|-| ";
+				if (!row.getBoxList().get(i).isWritten()) string += "|--| ";
 				else string += ("|" + row.getBoxList().get(i).getValue() + "| ");
 			}
 			
 			if (i == 5 || i == 7 || i == 12) {
-				string += "\n---------------\n";
+				string += "\n------------------\n";
 				for (Row row : rowList) {
 					if (i == 5) {
 						//					
-						string += "|" + row.getUpperScore() + "| ";
+						string += "|" + row.getUpperScore() + "|  ";
 						//					string += "\n---------------";
 					}  else if (i == 7) {
-						string += "|" + row.getMiddleScore() + "| ";
+						string += "|" + row.getMiddleScore() + "|  ";
 					} else if (i == 12) {
-						string += "|" + row.getLowerScore() + "| ";
+						string += "|" + row.getLowerScore() + "|  ";
 					}
 				}
-				string += "\n---------------";
+				string += "\n------------------";
 			}
 			
 			
