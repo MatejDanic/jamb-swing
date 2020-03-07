@@ -6,5 +6,5 @@ public class Game {
 		Jamb jamb = new Jamb();
 		jamb.start();
 	}
-	
+
 }

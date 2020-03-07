@@ -63,7 +63,7 @@ public class Jamb {
 			}
 			switch (input) {
 			case 1:
-				throwDice(diceList);
+				throwDice();
 				diceThrows++;
 				break;
 			case 2:
@@ -105,7 +105,7 @@ public class Jamb {
 		System.out.println("\n");
 	}
 
-	private void throwDice(List<Dice> diceList2) {
+	private void throwDice() {
 		System.out.println("\nDICE RESULTS:");
 		for (Dice dice : diceList) {
 			if (!dice.isReserved()) dice.throwDice();
