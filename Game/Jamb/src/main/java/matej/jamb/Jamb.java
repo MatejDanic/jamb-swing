@@ -15,7 +15,7 @@ public class Jamb {
 
 	private List<Player> playerList;
 	private List<Dice> diceList;
-	
+
 	public void start() {
 		int numOfDice = InputChecker.checkInput(5, 6, "number of dice");
 		diceList = new ArrayList<>();
@@ -52,10 +52,10 @@ public class Jamb {
 			int input = 0;
 			if (diceThrows == 0) {
 				input = InputChecker.checkInput(1, 1, "option number (1 - throw dice)");
-//				input = 1;
+				//				input = 1;
 			} else if (diceThrows == 1 && announcement.isEmpty()) {
 				input = InputChecker.checkInput(1, 4, "option number (1 - throw dice, 2 - keep some dice, 3 - write down, 4 - announce)");
-//				input = 3;
+				//				input = 3;
 			} else if (diceThrows == Constants.NUM_OF_THROWS) {
 				input = InputChecker.checkInput(3, 3, "option number (3 - write down)");
 			} else {
@@ -81,10 +81,9 @@ public class Jamb {
 					System.out.println(boxIndex + ". " + availBoxMap.get(boxIndex).toString());
 				}
 				input = InputChecker.checkInput(1, availBoxMap.size(), "index of box");
-//				input = 1;
+				//				input = 1;
 				rowType = RowType.valueOf(availBoxMap.get(input).split(" ")[0]);
 				boxType = BoxType.valueOf(availBoxMap.get(input).split(" ")[1]);
-//				System.out.println(rowType + " --- " + boxType);
 				player.getPaper().getRow(rowType).writeDown(diceList, player.getPaper().getRow(rowType).getBox(boxType).getId());
 				System.out.println(player.getPaper());
 				return;
@@ -112,7 +111,7 @@ public class Jamb {
 		}
 		System.out.println(diceList);
 	}
-	
+
 	public void calculateWinner() {
 		int winnerIndex = 0;
 		int winnerScore = 0;
