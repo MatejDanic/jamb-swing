@@ -4,8 +4,8 @@ import matej.jamb.paper.Paper;
 
 public class Player {
 
-	private String name;
 	private Paper paper;
+	private String name;
 	
 	public Player(String name) {
 		this.name = name;
@@ -14,14 +14,6 @@ public class Player {
 
 	public Paper getPaper() {
 		return paper;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 	
 	public String toString() {

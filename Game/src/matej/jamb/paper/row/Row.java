@@ -3,35 +3,67 @@ package matej.jamb.paper.row;
 import java.util.ArrayList;
 import java.util.List;
 
+import matej.jamb.category.CategoryChecker;
 import matej.jamb.constants.Constants;
 import matej.jamb.dice.Dice;
 
 public class Row {
 
 	private List<Box> boxList;
-	private boolean done;
 	private RowType rowType;
 	private int upperScore, middleScore, lowerScore;
 
-	public Boolean isDone() {
-		return done;
-	}
-
-	public RowType getRowType() {
-		return rowType;
+	public Row(RowType rowType) {
+		this.rowType = rowType;
+		this.boxList = new ArrayList<>();
+		this.upperScore = 0;
+		this.middleScore = 0;
+		this.lowerScore = 0;
+		initializeBoxes();
 	}
 
 	public List<Box> getBoxList() {
 		return boxList;
 	}
 
-	public Row(RowType rowType) {
-		this.boxList = new ArrayList<>();
-		this.rowType = rowType;
-		this.upperScore = 0;
-		this.middleScore = 0;
-		this.lowerScore = 0;
-		initializeBoxes();
+	public RowType getRowType() {
+		return rowType;
+	}
+
+	public int getUpperScore() {
+		int upperScore = 0;
+		for (int i = 0; i < 6; i++) {
+			upperScore += boxList.get(i).getValue();
+		}
+		return upperScore < 60 ? upperScore : upperScore + 30;
+	}
+
+	public int getMiddleScore() {
+		int middleScore;
+		if (boxList.get(6).isAvailable() || boxList.get(7).isAvailable() || boxList.get(0).isAvailable()) middleScore = 0;
+		else middleScore = (boxList.get(6).getValue() - boxList.get(7).getValue()) * boxList.get(0).getValue();
+		return middleScore;
+	}
+	public int getLowerScore() {
+		int lowerScore = 0;
+		for (int i = 8; i < 13; i++) {
+			lowerScore += boxList.get(i).getValue();
+		}
+		return lowerScore;
+	}
+
+	public int getScore() {
+		upperScore = getUpperScore();
+		middleScore = getMiddleScore();
+		lowerScore = getLowerScore();
+		return (upperScore + middleScore + lowerScore);
+	}
+
+	public boolean isDone() {
+		for(Box box : boxList) {
+			if (box.isAvailable()) return false;
+		}
+		return true;
 	}
 
 	private void initializeBoxes() {
@@ -92,37 +124,8 @@ public class Row {
 		}
 	}
 
-	public int getUpperScore() {
-		int upperScore = 0;
-		for (int i = 0; i < 6; i++) {
-			upperScore += boxList.get(i).getValue();
-		}
-		return upperScore < 60 ? upperScore : upperScore + 30;
-	}
-
-	public int getMiddleScore() {
-		int middleScore;
-		if (boxList.get(6).isAvailable() || boxList.get(7).isAvailable() || boxList.get(0).isAvailable()) middleScore = 0;
-		else middleScore = (boxList.get(6).getValue() - boxList.get(7).getValue()) * boxList.get(0).getValue();
-		return middleScore;
-	}
-	public int getLowerScore() {
-		int lowerScore = 0;
-		for (int i = 8; i < 13; i++) {
-			lowerScore += boxList.get(i).getValue();
-		}
-		return lowerScore;
-	}
-
-	public int getScore() {
-		upperScore = getUpperScore();
-		middleScore = getMiddleScore();
-		lowerScore = getLowerScore();
-		return (upperScore + middleScore + lowerScore);
-	}
-
 	public void writeDown(List<Dice> diceList, int boxNum) {
-//		System.out.println(boxNum);
+		//		System.out.println(boxNum);
 		int score = 0;
 		if (boxNum >= 0 && boxNum <= 5) {
 			for (Dice k : diceList) {
@@ -138,8 +141,6 @@ public class Row {
 			score = checkCategory(boxNum, diceList);
 		}
 		boxList.get(boxNum).setValue(score);
-//		System.out.println("score: " + score);
-//		boxList.get(boxNum).setAvailable(false);
 
 		if (boxNum < 12 && rowType == RowType.DOWNWARD) boxList.get(boxNum + 1).setAvailable(true);
 		if (boxNum > 0 && rowType == RowType.UPWARD) boxList.get(boxNum - 1).setAvailable(true);
@@ -149,129 +150,25 @@ public class Row {
 		int categoryScore = 0;
 		switch (boxNum) {
 		case 8:
-			categoryScore = checkTrips(diceList) == 0 ? 0 : checkTrips(diceList) + Constants.BONUS_TRIP;
+			categoryScore = CategoryChecker.checkTrips(diceList) + Constants.BONUS_TRIPS;
 			break;
 		case 9:
-			categoryScore = checkStraight(diceList);
+			categoryScore = CategoryChecker.checkStraight(diceList);
 			break;
 		case 10:
-			categoryScore = checkFull(diceList) == 0 ? 0 : checkFull(diceList) + Constants.BONUS_FULL;
+			categoryScore = CategoryChecker.checkFull(diceList) + Constants.BONUS_FULL;
 			break;
 		case 11:
-			categoryScore = checkPoker(diceList) == 0 ? 0 : checkPoker(diceList) + Constants.BONUS_POKER;
+			categoryScore = CategoryChecker.checkPoker(diceList) + Constants.BONUS_POKER;
 			break;
 		case 12:
-			categoryScore = checkJamb(diceList) == 0 ? 0 : checkJamb(diceList) + Constants.BONUS_JAMB;
+			categoryScore = CategoryChecker.checkJamb(diceList) + Constants.BONUS_JAMB;
 			break;
 		default:
 			categoryScore = 0;
 			break;
 		}
 		return categoryScore;
-	}
-
-	public int checkTrips(List<Dice> diceList) {
-		int tripScore = 0;
-		for (Dice d1 : diceList) {
-			int num = 1;
-			int score = d1.getCurrNum();
-			for (Dice d2 : diceList) {
-				if (d1 != d2 && d1.getCurrNum() == d2.getCurrNum()) {
-					num++;
-					if (num <= 3) score += d2.getCurrNum();
-				}
-			}
-//			System.out.println(score + " " + num);
-			if (num == 3) {
-				tripScore = score;
-				break;
-			}
-		}
-		return tripScore;
-	}
-
-	public int checkStraight(List<Dice> diceList) {
-		int straightScore = 0;
-		List<Integer> straight = new ArrayList<>();
-		straight.add(2);
-		straight.add(3);
-		straight.add(4);
-		straight.add(5);
-		List<Integer> numbers = new ArrayList<>();
-		for (Dice k : diceList) {
-			numbers.add(k.getCurrNum());
-		}
-		if (numbers.containsAll(straight)){
-			if (numbers.contains(1)) {
-				straightScore = 35;
-			} else if (numbers.contains(6))
-				straightScore = 45;
-		}
-		return straightScore;
-	}
-
-	public int checkFull(List<Dice> diceList) {
-		int fullScore = 0;
-		int scoreTwo = 0; 
-		int scoreThree = 0;
-		for (Dice d1 : diceList) {
-			int num = 1;
-			int score = d1.getCurrNum();
-			for (Dice d2 : diceList) {
-				if (d1 != d2 && d1.getCurrNum() == d2.getCurrNum()) {
-					num++;
-					score += d2.getCurrNum();
-				}
-			}
-			if (num == 2) {
-				scoreTwo = score;
-			} else if (num == 3) {
-				scoreThree = score;
-			}
-			if (scoreTwo != 0 && scoreThree != 0) {
-				fullScore = scoreTwo + scoreThree;
-				break;
-			}
-		}
-		return fullScore;
-	}
-
-	public int checkPoker(List<Dice> diceList) {
-		int pokerScore = 0;
-		for (Dice d1 : diceList) {
-			int num = 1;
-			int score = d1.getCurrNum();
-			for (Dice d2 : diceList) {
-				if (d1 != d2 && d1.getCurrNum() == d2.getCurrNum()) {
-					num++;
-					if (num <= 4) score += d2.getCurrNum();
-				}
-			}
-			if (num == 4) {
-				pokerScore = score;
-				break;
-			}
-		}
-		return pokerScore;
-	}
-
-	public int checkJamb(List<Dice> diceList) {
-		int jambScore = 0;
-		for (Dice d1 : diceList) {
-			int num = 1;
-			int score = d1.getCurrNum();
-			for (Dice d2 : diceList) {
-				if (d1 != d2 && d1.getCurrNum() == d2.getCurrNum()) {
-					num++;
-					score += d2.getCurrNum();
-				}
-			}
-			if (num == 5) {
-				jambScore = score;
-				break;
-			}
-		}
-		return jambScore;
 	}
 
 	public Box getBox(BoxType boxType) {
@@ -282,4 +179,5 @@ public class Row {
 		}
 		return null;
 	}
+
 }

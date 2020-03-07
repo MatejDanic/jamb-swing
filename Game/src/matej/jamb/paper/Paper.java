@@ -22,6 +22,10 @@ public class Paper {
 		rowList.add(new Row(RowType.ANNOUNCE));
 	}
 
+	public List<Row> getRowList() {
+		return rowList;
+	}
+
 	public Row getRow(RowType type) {
 		for (Row row : rowList) {
 			if (row.getRowType() == type) {
@@ -42,46 +46,47 @@ public class Paper {
 		int score = 0;
 		for (Row row : rowList) {
 			score += row.getScore();
-//			System.out.println("row score: " + row.getScore());
 		}
 		return score;
 	}
 
 	public String toString() {
-		String string = "\n------------------" + 
-						"\n |    A    |A   a" + 
-						"\n V    |    V|   n"+
-						"\n------------------";
+		
+		String dashes = "\n-------------------";
+		String string = dashes + 
+						"\n |    A    |A    a" + 
+						"\n V    |    V|    n"+
+						dashes;
+		int value;
 		for (int i = 0; i < 13; i++) {
 			string += "\n";
 			for (Row row : rowList) {
 				if (!row.getBoxList().get(i).isWritten()) string += "|--| ";
-				else string += ("|" + row.getBoxList().get(i).getValue() + "| ");
+				else {
+					value = row.getBoxList().get(i).getValue();
+					string += (isOneDigit(value) ? "| " : "|") + value + "| ";
+				}
 			}
-			
+
 			if (i == 5 || i == 7 || i == 12) {
-				string += "\n------------------\n";
+				string += dashes + "\n";
+				value = 0;
 				for (Row row : rowList) {
 					if (i == 5) {
-						//					
-						string += "|" + row.getUpperScore() + "|  ";
-						//					string += "\n---------------";
+						value = row.getUpperScore();
 					}  else if (i == 7) {
-						string += "|" + row.getMiddleScore() + "|  ";
+						value = row.getMiddleScore();
 					} else if (i == 12) {
-						string += "|" + row.getLowerScore() + "|  ";
+						value = row.getLowerScore();
 					}
+					string += (isOneDigit(value) ? "| " : "|") + value + "| ";
 				}
-				string += "\n------------------";
+				string += dashes;
 			}
-			
-			
+
+
 		}
 		return string + "\nScore: " + getScore() + "\n";
-	}
-
-	public List<Row> getRowList() {
-		return rowList;
 	}
 
 	public Map<Integer, String> getAvailBoxMap(int throwNumber, String announcement) {
@@ -110,7 +115,9 @@ public class Paper {
 			availBoxMap.put(1, RowType.ANNOUNCE + " " + getRow(RowType.ANNOUNCE).getBox(BoxType.valueOf(announcement.split(" ")[1])).getBoxType());
 		}
 		return availBoxMap;
-
 	}
 
+	public boolean isOneDigit(int number) {
+		return (number >= 0 && number <= 9);
+	}
 }

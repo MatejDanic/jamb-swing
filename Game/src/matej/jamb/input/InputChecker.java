@@ -6,13 +6,9 @@ import java.util.Scanner;
 
 public class InputChecker {
 
-	private Scanner sc;
+	private static Scanner sc = new Scanner(System.in);
 
-	public InputChecker(Scanner sc) {
-		this.sc = new Scanner(System.in);
-	}
-
-	public int checkInput(int min, int max, String string) {
+	public static int checkInput(int min, int max, String string) {
 		int input = 0;
 		System.out.println("Enter " + string + ":\n[" + min + "-" + max + "]\n");
 		while (sc.hasNextLine()) {
@@ -26,7 +22,7 @@ public class InputChecker {
 		return input;
 	}
 
-	public String checkInput(String string) {
+	public static String checkInput(String string) {
 		String input = "";
 		System.out.println("Enter " + string + ":\n");
 		while(sc.hasNextLine()) {
@@ -36,7 +32,7 @@ public class InputChecker {
 		return input;
 	}
 
-	public List<Integer> checkInput(int numOfDice, String string) {
+	public static List<Integer> checkInput(int numOfDice, String string) {
 		String[] input;
 		List<Integer> diceIndexList = new ArrayList<>();
 		System.out.println("Enter " + string + ":\n");

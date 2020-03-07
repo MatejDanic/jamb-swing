@@ -3,14 +3,18 @@ package matej.jamb.dice;
 import java.util.Random;
 
 public class Dice {
-	
+
+	private int currNum;
 	private boolean reserved;
 	private Random rand;
-	private int currNum;
 	
 	public Dice() {
 		this.reserved = false;
 		this.rand = new Random();
+	}
+	
+	public int getCurrNum() {
+		return this.currNum;
 	}
 
 	public boolean isReserved() {
@@ -19,10 +23,6 @@ public class Dice {
 
 	public void setReserved(boolean reserved) {
 		this.reserved = reserved;
-	}
-
-	public int getCurrNum() {
-		return this.currNum;
 	}
 	
 	public int throwDice() {
@@ -33,9 +33,5 @@ public class Dice {
 	public String toString() {
 		if (reserved) return "|" + currNum + "|";
 		else return "" + currNum;
-	}
-
-	public boolean getReserved() {
-		return reserved;
 	}
 }
