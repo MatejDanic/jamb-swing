@@ -1,4 +1,4 @@
-package matej.jamb.paper.row;
+package matej.jamb.models.enums;
 
 public enum RowType {
 	DOWNWARD, UPWARD, ANYDIR, ANNOUNCE;
