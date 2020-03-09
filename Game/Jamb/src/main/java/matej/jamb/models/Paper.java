@@ -1,25 +1,54 @@
-package matej.jamb.paper;
+package matej.jamb.models;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import matej.jamb.paper.row.Box;
-import matej.jamb.paper.row.BoxType;
-import matej.jamb.paper.row.Row;
-import matej.jamb.paper.row.RowType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 
+import matej.jamb.models.enums.BoxType;
+import matej.jamb.models.enums.RowType;
+import matej.jamb.network.JDBC;
+
+@Entity
 public class Paper {
 
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+	@Column
+    private int playerId;
+	@Transient
 	private List<Row> rowList;
+	
+	@Column
+	private int moveNum;
 
-	public Paper() {
+	private static int idCounter = 1;
+	
+	public Paper() {}
+	
+	public Paper(int playerId) {
+		this.id = idCounter++;
 		this.rowList = new ArrayList<>();
-		rowList.add(new Row(RowType.DOWNWARD));
-		rowList.add(new Row(RowType.UPWARD));
-		rowList.add(new Row(RowType.ANYDIR));
-		rowList.add(new Row(RowType.ANNOUNCE));
+		this.playerId = playerId;
+		this.moveNum = 0;
+		rowList.add(new Row(RowType.DOWNWARD, id));
+		rowList.add(new Row(RowType.UPWARD, id));
+		rowList.add(new Row(RowType.ANYDIR, id));
+		rowList.add(new Row(RowType.ANNOUNCE, id));
+		JDBC.executeStatement("INSERT INTO paper (player_id, move_num) VALUES (" + playerId + ", 0)");
+		JDBC.executeStatement("INSERT INTO option (paper_id, option, move_num) VALUES (" + id + ", 0, 0)");
+	}
+	
+	public int getId() {
+		return id;
 	}
 
 	public List<Row> getRowList() {
@@ -51,7 +80,6 @@ public class Paper {
 	}
 
 	public String toString() {
-		
 		String dashes = "\n-------------------";
 		String string = dashes + 
 						"\n |    A    |A    a" + 
@@ -64,7 +92,7 @@ public class Paper {
 				if (!row.getBoxList().get(i).isWritten()) string += "|--| ";
 				else {
 					value = row.getBoxList().get(i).getValue();
-					string += (isOneDigit(value) ? "| " : "|") + value + "| ";
+					string += (value >= 0 && value <= 9 ? "| " : "|") + value + "| ";
 				}
 			}
 
@@ -79,7 +107,7 @@ public class Paper {
 					} else if (i == 12) {
 						value = row.getLowerScore();
 					}
-					string += (isOneDigit(value) ? "| " : "|") + value + "| ";
+					string += (value >= 0 && value <= 9 ? "| " : "|") + value + "| ";
 				}
 				string += dashes;
 			}
@@ -117,7 +145,10 @@ public class Paper {
 		return availBoxMap;
 	}
 
-	public boolean isOneDigit(int number) {
-		return (number >= 0 && number <= 9);
+	public int getmoveNum() {
+		JDBC.executeStatement("UPDATE paper SET move_num = move_num + 1 WHERE id = " + id);
+		moveNum = moveNum + 1;
+		return moveNum;
 	}
+
 }

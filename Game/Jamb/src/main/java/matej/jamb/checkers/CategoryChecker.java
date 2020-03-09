@@ -1,4 +1,4 @@
-package matej.jamb.category; 
+package matej.jamb.checkers; 
  
 import java.util.ArrayList; 
 import java.util.List; 
@@ -108,5 +108,5 @@ public class CategoryChecker {
 			} 
 		} 
 		return result; 
-	} 
+	}
 } 

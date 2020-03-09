@@ -1,25 +1,56 @@
-package matej.jamb.paper.row;
+package matej.jamb.models;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import matej.jamb.category.CategoryChecker;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+
+import matej.jamb.checkers.CategoryChecker;
 import matej.jamb.constants.Constants;
 import matej.jamb.dice.Dice;
+import matej.jamb.models.enums.BoxType;
+import matej.jamb.models.enums.RowType;
+import matej.jamb.network.JDBC;
 
+@Entity
 public class Row {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	@Column
+	private int paperId;
+	@Column
+	private RowType	rowType;
+	@Column
+	private int upperScore;
+	@Column
+	private int middleScore;
+	@Column
+	private int lowerScore;
+	@Transient
 	private List<Box> boxList;
-	private RowType rowType;
-	private int upperScore, middleScore, lowerScore;
 
-	public Row(RowType rowType) {
+	public int getId() {
+		return id;
+	}
+
+	private static int idCounter = 1;
+
+	public Row() {}
+	
+	public Row(RowType rowType, int paperId) {
+		this.id = idCounter++;
 		this.rowType = rowType;
+		this.paperId = paperId;
 		this.boxList = new ArrayList<>();
-		this.upperScore = 0;
-		this.middleScore = 0;
-		this.lowerScore = 0;
 		initializeBoxes();
+		JDBC.executeStatement("INSERT INTO row (paper_id, row_type) VALUES (" + paperId + ", " + rowType.ordinal() + ")");
 	}
 
 	public List<Box> getBoxList() {
@@ -30,33 +61,34 @@ public class Row {
 		return rowType;
 	}
 
-	public int getUpperScore() {
+	public int computeUpperScore() {
 		int upperScore = 0;
 		for (int i = 0; i < 6; i++) {
 			upperScore += boxList.get(i).getValue();
 		}
-		return upperScore < 60 ? upperScore : upperScore + 30;
+		upperScore = upperScore < 60 ? upperScore : upperScore + 30;
+		JDBC.executeStatement("UPDATE row SET upper_score = " + upperScore + " WHERE id = " + id);
+		return upperScore;
 	}
 
-	public int getMiddleScore() {
+	public int computeMiddleScore() {
 		int middleScore;
 		if (boxList.get(6).isAvailable() || boxList.get(7).isAvailable() || boxList.get(0).isAvailable()) middleScore = 0;
 		else middleScore = (boxList.get(6).getValue() - boxList.get(7).getValue()) * boxList.get(0).getValue();
+		JDBC.executeStatement("UPDATE row SET middle_score = " + middleScore + " WHERE id = " + id);
 		return middleScore;
 	}
-	public int getLowerScore() {
+	public int computeLowerScore() {
 		int lowerScore = 0;
 		for (int i = 8; i < 13; i++) {
 			lowerScore += boxList.get(i).getValue();
 		}
+		JDBC.executeStatement("UPDATE row SET lower_score = " + lowerScore + " WHERE id = " + id);
 		return lowerScore;
 	}
 
 	public int getScore() {
-		upperScore = getUpperScore();
-		middleScore = getMiddleScore();
-		lowerScore = getLowerScore();
-		return (upperScore + middleScore + lowerScore);
+		return (computeUpperScore() + computeMiddleScore() + computeLowerScore());
 	}
 
 	public boolean isDone() {
@@ -118,7 +150,7 @@ public class Row {
 				break;
 			}
 			if (rowType == RowType.ANYDIR || rowType == RowType.ANNOUNCE) available = true;
-			Box box = new Box(boxType, i);
+			Box box = new Box(boxType, id, i);
 			box.setAvailable(available);
 			boxList.add(box);
 		}
@@ -142,33 +174,41 @@ public class Row {
 		}
 		boxList.get(boxNum).setValue(score);
 
+
 		if (boxNum < 12 && rowType == RowType.DOWNWARD) boxList.get(boxNum + 1).setAvailable(true);
 		if (boxNum > 0 && rowType == RowType.UPWARD) boxList.get(boxNum - 1).setAvailable(true);
 	}
 
 	public int checkCategory(int boxNum, List<Dice> diceList) {
 		int categoryScore = 0;
+		int bonus;
 		switch (boxNum) {
 		case 8:
-			categoryScore = CategoryChecker.checkTrips(diceList) + Constants.BONUS_TRIPS;
+			categoryScore = CategoryChecker.checkTrips(diceList);
+			bonus = Constants.BONUS_TRIPS;
 			break;
 		case 9:
 			categoryScore = CategoryChecker.checkStraight(diceList);
+			bonus = 0;
 			break;
 		case 10:
-			categoryScore = CategoryChecker.checkFull(diceList) + Constants.BONUS_FULL;
+			categoryScore = CategoryChecker.checkFull(diceList);
+			bonus = Constants.BONUS_FULL;
 			break;
 		case 11:
-			categoryScore = CategoryChecker.checkPoker(diceList) + Constants.BONUS_POKER;
+			categoryScore = CategoryChecker.checkPoker(diceList);
+			bonus = Constants.BONUS_POKER;
 			break;
 		case 12:
-			categoryScore = CategoryChecker.checkJamb(diceList) + Constants.BONUS_JAMB;
+			categoryScore = CategoryChecker.checkJamb(diceList);
+			bonus = Constants.BONUS_JAMB;
 			break;
 		default:
 			categoryScore = 0;
+			bonus = 0;
 			break;
 		}
-		return categoryScore;
+		return categoryScore == 0 ? categoryScore : categoryScore + bonus;
 	}
 
 	public Box getBox(BoxType boxType) {
@@ -178,6 +218,20 @@ public class Row {
 			}
 		}
 		return null;
+	}
+
+	public int getPaperId() {
+		return paperId;
+	}
+
+	public int getUpperScore() {
+		return upperScore;
+	}
+	public int getMiddleScore() {
+		return middleScore;
+	}
+	public int getLowerScore() {
+		return lowerScore;
 	}
 
 }
