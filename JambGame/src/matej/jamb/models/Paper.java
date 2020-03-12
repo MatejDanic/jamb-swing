@@ -12,13 +12,27 @@ public class Paper {
 
 
 	private List<Row> rowList;
+	private List<String> rowStringList;
 	
 	public Paper() {
 		this.rowList = new ArrayList<>();
+		this.rowStringList = new ArrayList<>();
 		rowList.add(new Row(RowType.DOWNWARD));
 		rowList.add(new Row(RowType.UPWARD));
 		rowList.add(new Row(RowType.ANYDIR));
 		rowList.add(new Row(RowType.ANNOUNCE));
+		
+		rowStringList.add(new String("Σ<br/>1-6"));
+		rowStringList.add(new String("MAX"));
+		rowStringList.add(new String("MIN"));
+		rowStringList.add(new String("DIFFx1"));
+		rowStringList.add(new String("TRIS"));
+		rowStringList.add(new String("SKALA"));
+		rowStringList.add(new String("FULL"));
+		rowStringList.add(new String("POKER"));
+		rowStringList.add(new String("JAMB"));
+		rowStringList.add(new String("Σ<br/>11-15"));
+		
 	}
 
 	public List<Row> getRowList() {
@@ -113,5 +127,9 @@ public class Paper {
 			availBoxMap.put(1, RowType.ANNOUNCE + " " + getRow(RowType.ANNOUNCE).getBox(BoxType.valueOf(announcement.split(" ")[1])).getBoxType());
 		}
 		return availBoxMap;
+	}
+
+	public List<String> getRowStringList() {
+		return rowStringList;
 	}
 }

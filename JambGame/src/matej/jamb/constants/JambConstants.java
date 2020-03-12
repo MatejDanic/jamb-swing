@@ -10,7 +10,7 @@ public class JambConstants {
 	public static final int BONUS_JAMB = 50;
 	public static final int NUM_OF_DICE = 5;
 	public static final int BOX_HEIGHT = 40;
-	public static final int BOX_WIDTH = 40;
-	public static final int FRAME_WIDTH_MIN = 400;
-	public static final int FRAME_HEIGHT_MIN = 700;
+	public static final int BOX_WIDTH = 75;
+	public static final int FRAME_WIDTH = 800;
+	public static final int FRAME_HEIGHT = 900;
 }

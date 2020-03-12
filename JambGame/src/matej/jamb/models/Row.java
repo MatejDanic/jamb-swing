@@ -27,7 +27,7 @@ public class Row {
 		return rowType;
 	}
 
-	protected int getUpperScore() {
+	public int getUpperScore() {
 		int upperScore = 0;
 		for (int i = 0; i < 6; i++) {
 			upperScore += boxList.get(i).getValue();
@@ -36,13 +36,13 @@ public class Row {
 		return upperScore;
 	}
 
-	protected int getMiddleScore() {
+	public int getMiddleScore() {
 		int middleScore;
 		if (boxList.get(6).isAvailable() || boxList.get(7).isAvailable() || boxList.get(0).isAvailable()) middleScore = 0;
 		else middleScore = (boxList.get(6).getValue() - boxList.get(7).getValue()) * boxList.get(0).getValue();
 		return middleScore;
 	}
-	protected int getLowerScore() {
+	public int getLowerScore() {
 		int lowerScore = 0;
 		for (int i = 8; i < 13; i++) {
 			lowerScore += boxList.get(i).getValue();
@@ -50,11 +50,11 @@ public class Row {
 		return lowerScore;
 	}
 
-	protected int getScore() {
+	public int getScore() {
 		return (getUpperScore() + getMiddleScore() + getLowerScore());
 	}
 
-	protected boolean isDone() {
+	public boolean isDone() {
 		for(Box box : boxList) {
 			if (box.isAvailable()) return false;
 		}
@@ -120,17 +120,14 @@ public class Row {
 	}
 
 	public void writeDown(List<Dice> diceList, int boxNum) {
-		//		System.out.println(boxNum);
-		System.out.println(diceList);
-		System.out.println(boxNum);
 		int score = 0;
-		if (boxNum >= 0 && boxNum <= 5) {
+		if (boxNum >= BoxType.ONES.ordinal() && boxNum <= BoxType.SIXES.ordinal()) {
 			for (Dice k : diceList) {
 				if (k.getCurrNum() == boxNum + 1) {
 					score += k.getCurrNum();
 				}
 			}
-		} else if (boxNum >= 6 && boxNum <= 7) {
+		} else if (boxNum == BoxType.MAX.ordinal() || boxNum == BoxType.MIN.ordinal()) {
 			for (Dice k : diceList) {
 				score += k.getCurrNum();
 			}
