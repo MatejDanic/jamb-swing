@@ -1,4 +1,4 @@
-package matej.jamb.dice;
+package matej.jamb.models;
 
 import java.util.Random;
 
@@ -9,6 +9,7 @@ public class Dice {
 	private Random rand;
 	
 	public Dice() {
+		this.currNum = 1;
 		this.reserved = false;
 		this.rand = new Random();
 	}
@@ -25,7 +26,7 @@ public class Dice {
 		this.reserved = reserved;
 	}
 	
-	public int throwDice() {
+	public int roll() {
 		currNum = rand.nextInt(6)+1;
 		return (currNum);
 	}

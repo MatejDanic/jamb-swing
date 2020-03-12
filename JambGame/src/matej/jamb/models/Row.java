@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import matej.jamb.checkers.CategoryChecker;
-import matej.jamb.constants.Constants;
-import matej.jamb.dice.Dice;
+import matej.jamb.constants.JambConstants;
 import matej.jamb.models.enums.BoxType;
 import matej.jamb.models.enums.RowType;
 
@@ -28,7 +27,7 @@ public class Row {
 		return rowType;
 	}
 
-	public int getUpperScore() {
+	protected int getUpperScore() {
 		int upperScore = 0;
 		for (int i = 0; i < 6; i++) {
 			upperScore += boxList.get(i).getValue();
@@ -37,13 +36,13 @@ public class Row {
 		return upperScore;
 	}
 
-	public int getMiddleScore() {
+	protected int getMiddleScore() {
 		int middleScore;
 		if (boxList.get(6).isAvailable() || boxList.get(7).isAvailable() || boxList.get(0).isAvailable()) middleScore = 0;
 		else middleScore = (boxList.get(6).getValue() - boxList.get(7).getValue()) * boxList.get(0).getValue();
 		return middleScore;
 	}
-	public int getLowerScore() {
+	protected int getLowerScore() {
 		int lowerScore = 0;
 		for (int i = 8; i < 13; i++) {
 			lowerScore += boxList.get(i).getValue();
@@ -51,11 +50,11 @@ public class Row {
 		return lowerScore;
 	}
 
-	public int getScore() {
+	protected int getScore() {
 		return (getUpperScore() + getMiddleScore() + getLowerScore());
 	}
 
-	public boolean isDone() {
+	protected boolean isDone() {
 		for(Box box : boxList) {
 			if (box.isAvailable()) return false;
 		}
@@ -63,7 +62,7 @@ public class Row {
 	}
 
 	private void initializeBoxes() {
-		for (int i = 0; i < Constants.NUM_OF_BOXES; i++) {
+		for (int i = 0; i < JambConstants.NUM_OF_BOXES; i++) {
 			boolean available = false;
 			BoxType boxType;
 			switch (i) {
@@ -149,7 +148,7 @@ public class Row {
 		switch (boxNum) {
 		case 8:
 			categoryScore = CategoryChecker.checkTrips(diceList);
-			bonus = Constants.BONUS_TRIPS;
+			bonus = JambConstants.BONUS_TRIPS;
 			break;
 		case 9:
 			categoryScore = CategoryChecker.checkStraight(diceList);
@@ -157,15 +156,15 @@ public class Row {
 			break;
 		case 10:
 			categoryScore = CategoryChecker.checkFull(diceList);
-			bonus = Constants.BONUS_FULL;
+			bonus = JambConstants.BONUS_FULL;
 			break;
 		case 11:
 			categoryScore = CategoryChecker.checkPoker(diceList);
-			bonus = Constants.BONUS_POKER;
+			bonus = JambConstants.BONUS_POKER;
 			break;
 		case 12:
 			categoryScore = CategoryChecker.checkJamb(diceList);
-			bonus = Constants.BONUS_JAMB;
+			bonus = JambConstants.BONUS_JAMB;
 			break;
 		default:
 			categoryScore = 0;
