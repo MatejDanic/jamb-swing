@@ -1,7 +1,7 @@
 package matej.jamb.constants;
 
 public class JambConstants {
-	public static final int NUM_OF_THROWS = 3;
+	public static final int NUM_OF_ROLLS = 3;
 	public static final int NUM_OF_BOXES = 13;
 	public static final int NUM_OF_ROWS = 4;
 	public static final int BONUS_TRIPS = 10;

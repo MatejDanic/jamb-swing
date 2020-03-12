@@ -121,6 +121,8 @@ public class Row {
 
 	public void writeDown(List<Dice> diceList, int boxNum) {
 		//		System.out.println(boxNum);
+		System.out.println(diceList);
+		System.out.println(boxNum);
 		int score = 0;
 		if (boxNum >= 0 && boxNum <= 5) {
 			for (Dice k : diceList) {

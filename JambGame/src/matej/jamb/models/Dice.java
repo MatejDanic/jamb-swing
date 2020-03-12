@@ -32,7 +32,6 @@ public class Dice {
 	}
 	
 	public String toString() {
-		if (reserved) return "|" + currNum + "|";
-		else return "" + currNum;
+		return reserved ? "|" + currNum + "|" : Integer.toString(currNum);
 	}
 }
