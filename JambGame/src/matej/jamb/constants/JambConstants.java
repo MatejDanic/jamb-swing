@@ -1,6 +1,6 @@
 package matej.jamb.constants;
 
-public class Constants {
+public class JambConstants {
 	public static final int NUM_OF_THROWS = 3;
 	public static final int NUM_OF_BOXES = 13;
 	public static final int NUM_OF_ROWS = 4;
@@ -9,4 +9,8 @@ public class Constants {
 	public static final int BONUS_POKER = 40;
 	public static final int BONUS_JAMB = 50;
 	public static final int NUM_OF_DICE = 5;
+	public static final int BOX_HEIGHT = 40;
+	public static final int BOX_WIDTH = 40;
+	public static final int FRAME_WIDTH_MIN = 400;
+	public static final int FRAME_HEIGHT_MIN = 700;
 }

@@ -1,9 +1,9 @@
 package matej.jamb.checkers; 
  
 import java.util.ArrayList; 
-import java.util.List; 
- 
-import matej.jamb.dice.Dice; 
+import java.util.List;
+
+import matej.jamb.models.Dice; 
  
 public class CategoryChecker { 
 	 
