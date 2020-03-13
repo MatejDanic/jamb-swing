@@ -153,7 +153,7 @@ public class GameApplication {
 
 				DiceRollAnimation worker = new DiceRollAnimation(bDiceMap, 10, diceMap);
 				setPaperEnabled(false);
-//				bWriteDown.setEnabled(false);
+				//				bWriteDown.setEnabled(false);
 				bAnnounce.setEnabled(false);
 				try {
 					worker.execute();
@@ -193,62 +193,11 @@ public class GameApplication {
 
 			private void toggleButtons() {
 				setPaperEnabled(!isPaperEnabled());
-//				bWriteDown.setEnabled(!bWriteDown.isEnabled());
 				bRollDice.setEnabled(!bRollDice.isEnabled());
+				setDiceEnabled(announcing, false);
 				announcing = !announcing;
-				setDiceEnabled(true, false);
 			}
 		});
-
-		// Button for writing down dice result
-//		bWriteDown = new JButton("WRITE DOWN");
-//		bWriteDown.setBackground(Color.WHITE);
-//		bWriteDown.setForeground(Color.BLACK);
-//		bWriteDown.setEnabled(false);
-//
-//		bWriteDown.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent event) {
-//
-//				if (announcement != -1) {
-//					endTurn();
-//				} else {
-//					toggleButtons();
-//					for (ArrayList<JButton> bBoxRowList : bBoxPaperList) {
-//						for (JButton bBox : bBoxRowList) {
-//							if (bBoxPaperList.indexOf(bBoxRowList) == RowType.ANNOUNCE.ordinal() && diceRolls > 1) continue;
-//							if (paper.getRow(RowType.values()[bBoxPaperList.indexOf(bBoxRowList)]).getBox(BoxType.values()[bBoxRowList.indexOf(bBox)]).isAvailable())
-////							if (writing)	{
-////								bBox.setBackground(Color.LIGHT_GRAY);
-////							else bBox.setBackground(Color.WHITE);
-//								bBox.setEnabled(true);
-////							else 
-////								bBox.setBackground(Color.LIGHT_GRAY);
-//						}
-//					}
-//				}
-//			}
-//
-//			private void toggleButtons() {
-//				bRollDice.setEnabled(!bRollDice.isEnabled());
-//				bAnnounce.setEnabled(!bAnnounce.isEnabled());
-////				writing = !writing;
-//				for (ArrayList<JButton> bBoxRowList : bBoxPaperList) {
-//					for (JButton bBox : bBoxRowList) {
-//						if (bBoxPaperList.indexOf(bBoxRowList) == RowType.ANNOUNCE.ordinal() && diceRolls > 1) continue;
-//						if (paper.getRow(RowType.values()[bBoxPaperList.indexOf(bBoxRowList)]).getBox(BoxType.values()[bBoxRowList.indexOf(bBox)]).isAvailable())
-//							bBox.setEnabled(false);
-//						else 
-//							bBox.setBackground(Color.WHITE);
-//					}
-//				}
-//				if (diceRolls < JambConstants.NUM_OF_ROLLS) {
-//					setDiceEnabled(true, false);
-//				} else {
-//					setDiceEnabled(false, true);
-//				}
-//				
-//			}
-//		});
 
 		// Paper box buttons
 		bBoxPaperList = new ArrayList<ArrayList<JButton>>();
@@ -307,8 +256,10 @@ public class GameApplication {
 				if (i == 6 || i == 9 || i == 15) {
 					bOther.setBackground(new Color(176, 196, 222));
 				}
-				System.out.println(i);
-				bOther.setText("<html><font size=4><center>" + paper.getRowStringList().get(i-6) + "</center></font></html>");
+				//				System.out.println(i);
+				bOther.setFont(new Font("Arial", Font.BOLD, 14));
+
+				bOther.setText("<html><center>" + paper.getRowStringList().get(i-6) + "</center></html>");
 			} else if (i == 16) {
 				bOther.setIcon(boxImageIcons[6]);
 			} else if(i == 20) {
@@ -316,12 +267,14 @@ public class GameApplication {
 			} else if(i == 24) {
 				bOther.setIcon(boxImageIcons[8]);
 			} else if (i == 28) {
-				bOther.setText("<html><font size=2><center>NAJAVA</center></font></html>");
+				bOther.setFont(new Font("Arial", Font.BOLD, 12));
+				bOther.setText("<html><center>NAJAVA</center></html>");
 			} else if (i == 17 || i == 21 || i == 25 || i == 29 || i == 32
 					|| i == 18 || i == 22 || i == 26 || i == 30 || i == 33
 					|| i == 19 || i == 23 || i == 27 || i == 31 || i == 34 || i == 35) {
 				bOther.setBackground(new Color(176, 196, 222));
 				bOther.setText("0");
+				bOther.setFont(new Font("Arial", Font.BOLD, 20));
 			}
 			bOther.setPreferredSize(new Dimension(JambConstants.BOX_WIDTH, JambConstants.BOX_HEIGHT));
 			bOtherMap.put(i, bOther);
@@ -407,7 +360,7 @@ public class GameApplication {
 
 		east.add(bRollDice);
 		east.add(bAnnounce);
-//		south.add(bWriteDown);
+		//		south.add(bWriteDown);
 
 		pane.add(east, BorderLayout.EAST);
 		pane.add(west, BorderLayout.WEST);
@@ -453,7 +406,7 @@ public class GameApplication {
 		public void done() {
 
 			setPaperEnabled(true);
-//			bWriteDown.setEnabled(true);
+			//			bWriteDown.setEnabled(true);
 			if (diceRolls == 1) {
 				bAnnounce.setEnabled(true);
 				setDiceEnabled(true, false);
@@ -529,10 +482,10 @@ public class GameApplication {
 					bBox.setText("");
 				}
 			}
-			
+
 			// calculate scores
 			int i = bBoxPaperList.indexOf(bBoxRowList);
-//			System.out.println(i);
+			//			System.out.println(i);
 			upperScore = paper.getRow(RowType.values()[i]).getUpperScore();
 			upperSum += upperScore;
 			bOtherMap.get(17+4*i).setText(Integer.toString(upperScore));
@@ -547,11 +500,11 @@ public class GameApplication {
 		bOtherMap.get(33).setText(Integer.toString(middleSum));
 		bOtherMap.get(34).setText(Integer.toString(lowerSum));
 		bOtherMap.get(35).setText(Integer.toString(upperSum+middleSum+lowerSum));
-		
+
 		// reset dice
 		diceRolls = 0;
 		setDiceEnabled(false, true);
-		
+
 		// enable dice roll button, disable all else
 		bRollDice.setEnabled(true);
 		bAnnounce.setEnabled(false);

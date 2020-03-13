@@ -18,7 +18,7 @@ public class CategoryChecker {
 					if (num <= 3) score += d2.getCurrNum(); 
 				} 
 			} 
-			if (num == 3) { 
+			if (num >= 3) { 
 				result = score; 
 				break; 
 			} 
@@ -83,7 +83,7 @@ public class CategoryChecker {
 					if (num <= 4) score += d2.getCurrNum(); 
 				} 
 			} 
-			if (num == 4) { 
+			if (num >= 4) { 
 				result = score; 
 				break; 
 			} 
@@ -99,10 +99,10 @@ public class CategoryChecker {
 			for (Dice d2 : diceList) { 
 				if (d1 != d2 && d1.getCurrNum() == d2.getCurrNum()) { 
 					num++; 
-					score += d2.getCurrNum(); 
+					if (num <= 5) score += d2.getCurrNum();
 				} 
 			} 
-			if (num == 5) { 
+			if (num >= 5) { 
 				result = score; 
 				break; 
 			} 
