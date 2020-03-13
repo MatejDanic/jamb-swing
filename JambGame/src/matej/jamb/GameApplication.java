@@ -143,9 +143,10 @@ public class GameApplication {
 		}
 
 		// Button for rolling dice
-		bRollDice = new JButton("ROLL DICE");
+		bRollDice = new JButton("BACI KOCKE");
 		bRollDice.setBackground(Color.WHITE);
 		bRollDice.setForeground(Color.BLACK);
+		bRollDice.setPreferredSize(new Dimension (150, 30));
 		bRollDice.setEnabled(true);
 
 		bRollDice.addActionListener(new ActionListener() {
@@ -166,9 +167,10 @@ public class GameApplication {
 		});
 
 		// Button for announcement of box
-		bAnnounce = new JButton("ANNOUNCE");
+		bAnnounce = new JButton("NAJAVI");
 		bAnnounce.setBackground(Color.WHITE);
 		bAnnounce.setForeground(Color.BLACK);
+		bAnnounce.setPreferredSize(new Dimension(150, 30));
 		bAnnounce.setEnabled(false);
 
 		bAnnounce.addActionListener(new ActionListener() {
@@ -303,70 +305,66 @@ public class GameApplication {
 		Container pane = frame.getContentPane();
 
 		JPanel east = new JPanel(new FlowLayout());
-		JPanel west = new JPanel(new FlowLayout());
+		east.setPreferredSize(new Dimension(180, 100));
 		JPanel dicePanel = new JPanel(new FlowLayout());
 		JPanel paperPanel = new JPanel(new GridBagLayout());
-		JPanel south = new JPanel(new FlowLayout());
+		GridBagConstraints paperGbc = new GridBagConstraints();
 
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.BOTH;
+		paperGbc.fill = GridBagConstraints.BOTH;
 
 		for (Map.Entry<Integer, JButton> entry : bDiceMap.entrySet()) {
 			dicePanel.add(entry.getValue());
 		}
 
 		for (int i = 0; i < 6; i++) {
-			gbc.gridx = i;
+			paperGbc.gridx = i;
 			if (i == 0) {
 				for (int j = 0; j < 16; j++) {
-					gbc.gridy = j+1;
-					paperPanel.add(bOtherMap.get(j), gbc);
+					paperGbc.gridy = j+1;
+					paperPanel.add(bOtherMap.get(j), paperGbc);
 				}
 			} else if (i == 5) {
-				gbc.gridy = 7;
-				paperPanel.add(bOtherMap.get(32), gbc);
-				gbc.gridy = 10;
-				paperPanel.add(bOtherMap.get(33), gbc);
-				gbc.gridy = 16;
-				paperPanel.add(bOtherMap.get(34), gbc);
+				paperGbc.gridy = 7;
+				paperPanel.add(bOtherMap.get(32), paperGbc);
+				paperGbc.gridy = 10;
+				paperPanel.add(bOtherMap.get(33), paperGbc);
+				paperGbc.gridy = 16;
+				paperPanel.add(bOtherMap.get(34), paperGbc);
 			} else {
-				gbc.gridy = 0;
+				paperGbc.gridy = 0;
 				for (int j = 0; j < 13; j++) {
 					if (j == 0) {
-						paperPanel.add(bOtherMap.get(16 + 4*(i-1)), gbc);
-						gbc.gridy++;
+						paperPanel.add(bOtherMap.get(16 + 4*(i-1)), paperGbc);
+						paperGbc.gridy++;
 					} else if (j == 6) {
-						paperPanel.add(bOtherMap.get(17 + 4*(i-1)), gbc);
-						gbc.gridy++;
+						paperPanel.add(bOtherMap.get(17 + 4*(i-1)), paperGbc);
+						paperGbc.gridy++;
 					} else if (j == 8) {
-						paperPanel.add(bOtherMap.get(18 + 4*(i-1)), gbc);
-						gbc.gridy++;
+						paperPanel.add(bOtherMap.get(18 + 4*(i-1)), paperGbc);
+						paperGbc.gridy++;
 					}
-					paperPanel.add(bBoxPaperList.get(i-1).get(j), gbc);
-					gbc.gridy++;
+					paperPanel.add(bBoxPaperList.get(i-1).get(j), paperGbc);
+					paperGbc.gridy++;
 					if (j == 12) {
-						paperPanel.add(bOtherMap.get(19 + 4*(i-1)), gbc);
+						paperPanel.add(bOtherMap.get(19 + 4*(i-1)), paperGbc);
 					}
 				}
 			}
 
 			if (i == 4) {
-				gbc.gridy = 17;
-				gbc.gridwidth = GridBagConstraints.REMAINDER;
-				paperPanel.add(bOtherMap.get(35), gbc);
-				gbc.gridwidth = 1;
+				paperGbc.gridy = 17;
+				paperGbc.gridwidth = GridBagConstraints.REMAINDER;
+				paperPanel.add(bOtherMap.get(35), paperGbc);
+				paperGbc.gridwidth = 1;
 			}
 		}
 
 		east.add(bRollDice);
 		east.add(bAnnounce);
-		//		south.add(bWriteDown);
-
 		pane.add(east, BorderLayout.EAST);
-		pane.add(west, BorderLayout.WEST);
 		pane.add(paperPanel, BorderLayout.CENTER);
 		pane.add(dicePanel, BorderLayout.NORTH);
-		pane.add(south, BorderLayout.SOUTH);
+		
 	}
 
 	/**
