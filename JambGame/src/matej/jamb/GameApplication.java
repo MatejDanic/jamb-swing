@@ -73,10 +73,14 @@ public class GameApplication {
 	 * Create the application.
 	 */
 	public GameApplication() {
+
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		frame = new JFrame("Jamb");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
-		frame.setMinimumSize(new Dimension(JambConstants.FRAME_WIDTH, JambConstants.FRAME_HEIGHT));
+		frame.setMinimumSize(new Dimension((int)(dim.getWidth()/JambConstants.FRAME_WIDTH_RATIO), (int)(dim.getHeight()/JambConstants.FRAME_HEIGHT_RATIO)));
+//		System.out.println(dim);
+//		System.out.println(frame.getSize());
 		frame.setResizable(true);
 
 		paper = new Paper();
@@ -115,10 +119,8 @@ public class GameApplication {
 		//		System.out.println("Adding components...");
 		addComponents();
 
-		//		frame.pack();
+//		frame.pack();
 		//		System.out.println("Adding components successful");
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		System.out.println(frame.getSize());
 		frame.setLocation(dim.width/2 - frame.getSize().width/2, dim.height/2 - frame.getSize().height/2);
 	}
 
@@ -149,7 +151,7 @@ public class GameApplication {
 		bRollDice = new JButton("BACI KOCKE");
 		bRollDice.setBackground(Color.WHITE);
 		bRollDice.setForeground(Color.BLACK);
-		bRollDice.setPreferredSize(new Dimension (150, 30));
+		bRollDice.setPreferredSize(new Dimension ((int)(frame.getWidth()/JambConstants.BUTTON_WIDTH_RATIO), (int)(frame.getHeight()/JambConstants.BUTTON_HEIGHT_RATIO)));
 		bRollDice.setEnabled(true);
 
 		bRollDice.addActionListener(new ActionListener() {
@@ -173,7 +175,7 @@ public class GameApplication {
 		bAnnounce = new JButton("NAJAVI");
 		bAnnounce.setBackground(Color.WHITE);
 		bAnnounce.setForeground(Color.BLACK);
-		bAnnounce.setPreferredSize(new Dimension(150, 30));
+		bAnnounce.setPreferredSize(new Dimension ((int)(frame.getWidth()/JambConstants.BUTTON_WIDTH_RATIO), (int)(frame.getHeight()/JambConstants.BUTTON_HEIGHT_RATIO)));
 		bAnnounce.setEnabled(false);
 
 		bAnnounce.addActionListener(new ActionListener() {
@@ -216,7 +218,7 @@ public class GameApplication {
 				button.setBackground(Color.WHITE);
 				button.setFont(new Font("Arial", Font.BOLD, 20));
 				button.setEnabled(false);
-				button.setPreferredSize(new Dimension(JambConstants.BOX_WIDTH, JambConstants.BOX_HEIGHT));
+				button.setPreferredSize(new Dimension((int)(frame.getWidth()/JambConstants.BOX_WIDTH_RATIO), (int)(frame.getHeight()/JambConstants.BOX_HEIGHT_RATIO)));
 
 				button.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent event) {
@@ -282,7 +284,8 @@ public class GameApplication {
 				bOther.setText("0");
 				bOther.setFont(new Font("Arial", Font.BOLD, 20));
 			}
-			bOther.setPreferredSize(new Dimension(JambConstants.BOX_WIDTH, JambConstants.BOX_HEIGHT));
+			bOther.setPreferredSize(new Dimension((int)(frame.getWidth()/JambConstants.BOX_WIDTH_RATIO), (int)(frame.getHeight()/JambConstants.BOX_HEIGHT_RATIO)));
+//			System.out.println(bOther.getWidth());
 			bOtherMap.put(i, bOther);
 		}
 	}
