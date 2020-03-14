@@ -23,6 +23,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
@@ -76,7 +77,7 @@ public class GameApplication {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
 		frame.setMinimumSize(new Dimension(JambConstants.FRAME_WIDTH, JambConstants.FRAME_HEIGHT));
-		frame.setResizable(false);
+		frame.setResizable(true);
 
 		paper = new Paper();
 		announcement = -1;
@@ -113,9 +114,11 @@ public class GameApplication {
 		//		System.out.println("Initializing successful");
 		//		System.out.println("Adding components...");
 		addComponents();
+
+		//		frame.pack();
 		//		System.out.println("Adding components successful");
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		//		System.out.println(frame.getSize());
+		System.out.println(frame.getSize());
 		frame.setLocation(dim.width/2 - frame.getSize().width/2, dim.height/2 - frame.getSize().height/2);
 	}
 
@@ -183,10 +186,11 @@ public class GameApplication {
 							if (paper.getRow(RowType.ANNOUNCE).getBox(BoxType.values()[bBoxRowList.indexOf(bBox)]).isAvailable()) {
 								bBox.setEnabled(announcing);
 							} else {
-								bBox.setBackground(Color.LIGHT_GRAY);
+								if (announcing) bBox.setBackground(Color.LIGHT_GRAY);
+								else bBox.setBackground(Color.WHITE);
 							}
 						} else {
-							if (announcing)	bBox.setBackground(Color.LIGHT_GRAY);
+							if (announcing) bBox.setBackground(Color.LIGHT_GRAY);
 							else bBox.setBackground(Color.WHITE);
 						}
 					}
@@ -364,7 +368,7 @@ public class GameApplication {
 		pane.add(east, BorderLayout.EAST);
 		pane.add(paperPanel, BorderLayout.CENTER);
 		pane.add(dicePanel, BorderLayout.NORTH);
-		
+
 	}
 
 	/**
@@ -472,12 +476,14 @@ public class GameApplication {
 		upperSum = 0;
 		middleSum = 0;
 		lowerSum = 0;
+		boolean done = true;
 		for (ArrayList<JButton> bBoxRowList : bBoxPaperList) {
 			for (JButton bBox : bBoxRowList) {
 				RowType rowType = RowType.values()[bBoxPaperList.indexOf(bBoxRowList)];
 				BoxType boxType = BoxType.values()[bBoxRowList.indexOf(bBox)];
 				if(!paper.getRow(rowType).getBox(boxType).isWritten()) {
 					bBox.setText("");
+					done = false;
 				}
 			}
 
@@ -499,6 +505,9 @@ public class GameApplication {
 		bOtherMap.get(34).setText(Integer.toString(lowerSum));
 		bOtherMap.get(35).setText(Integer.toString(upperSum+middleSum+lowerSum));
 
+		if (done) {
+			JOptionPane.showMessageDialog(null, "Rezultat = " + bOtherMap.get(35).getText(), "Čestitamo!", JOptionPane.INFORMATION_MESSAGE);
+		}
 		// reset dice
 		diceRolls = 0;
 		setDiceEnabled(false, true);
@@ -509,6 +518,12 @@ public class GameApplication {
 		setPaperEnabled(false);
 		announcing = false;
 		announcement = -1;
+		
+		if (done) {
+			JOptionPane.showMessageDialog(null, "Rezultat = " + bOtherMap.get(35).getText(), "Čestitamo!", JOptionPane.INFORMATION_MESSAGE);
+			bRollDice.setEnabled(false);
+		}
+		
 	}
 
 	//	private void playTurn() {
