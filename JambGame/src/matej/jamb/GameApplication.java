@@ -75,10 +75,14 @@ public class GameApplication {
 	public GameApplication() {
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+//		dim = new Dimension(1366, 768);
 		frame = new JFrame("Jamb");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
-		frame.setMinimumSize(new Dimension((int)(dim.getWidth()/JambConstants.FRAME_WIDTH_RATIO), (int)(dim.getHeight()/JambConstants.FRAME_HEIGHT_RATIO)));
+		frame.setSize(new Dimension((int)(dim.getWidth()/JambConstants.FRAME_WIDTH_RATIO), (int)(dim.getHeight()/JambConstants.FRAME_HEIGHT_RATIO)));
+		frame.setMinimumSize(new Dimension((int)(dim.getWidth()/JambConstants.FRAME_MIN_WIDTH_RATIO), (int)(dim.getHeight()/JambConstants.FRAME_MIN_HEIGHT_RATIO)));
+//		frame.setPreferredSize(new Dimension((int)(dim.getWidth()/JambConstants.FRAME_WIDTH_RATIO), (int)(dim.getHeight()/JambConstants.FRAME_HEIGHT_RATIO)));
+		frame.setLocation(dim.width/2 - frame.getSize().width/2, dim.height/2 - frame.getSize().height/2);
 //		System.out.println(dim);
 //		System.out.println(frame.getSize());
 		frame.setResizable(true);
@@ -119,9 +123,11 @@ public class GameApplication {
 		//		System.out.println("Adding components...");
 		addComponents();
 
-//		frame.pack();
+		frame.pack();
+		System.out.println(frame.getSize());
+
 		//		System.out.println("Adding components successful");
-		frame.setLocation(dim.width/2 - frame.getSize().width/2, dim.height/2 - frame.getSize().height/2);
+		
 	}
 
 	/**
@@ -216,7 +222,7 @@ public class GameApplication {
 
 				JButton button = new JButton();
 				button.setBackground(Color.WHITE);
-				button.setFont(new Font("Arial", Font.BOLD, 20));
+				button.setFont(new Font("Arial", Font.BOLD, frame.getWidth()/JambConstants.FONT_RATIO));
 				button.setEnabled(false);
 				button.setPreferredSize(new Dimension((int)(frame.getWidth()/JambConstants.BOX_WIDTH_RATIO), (int)(frame.getHeight()/JambConstants.BOX_HEIGHT_RATIO)));
 
@@ -265,8 +271,8 @@ public class GameApplication {
 					bOther.setBackground(new Color(176, 196, 222));
 				}
 				//				System.out.println(i);
-				bOther.setFont(new Font("Arial", Font.BOLD, 14));
-
+				bOther.setFont(new Font("Arial", Font.BOLD, (int)(frame.getWidth()/JambConstants.FONT_2_RATIO)));
+//				System.out.println((int)(frame.getWidth()/JambConstants.FONT_2_RATIO));
 				bOther.setText("<html><center>" + paper.getRowStringList().get(i-6) + "</center></html>");
 			} else if (i == 16) {
 				bOther.setIcon(boxImageIcons[6]);
@@ -275,14 +281,14 @@ public class GameApplication {
 			} else if(i == 24) {
 				bOther.setIcon(boxImageIcons[8]);
 			} else if (i == 28) {
-				bOther.setFont(new Font("Arial", Font.BOLD, 12));
+				bOther.setFont(new Font("Arial", Font.BOLD, (int)(frame.getWidth()/JambConstants.FONT_3_RATIO)));
 				bOther.setText("<html><center>NAJAVA</center></html>");
 			} else if (i == 17 || i == 21 || i == 25 || i == 29 || i == 32
 					|| i == 18 || i == 22 || i == 26 || i == 30 || i == 33
 					|| i == 19 || i == 23 || i == 27 || i == 31 || i == 34 || i == 35) {
 				bOther.setBackground(new Color(176, 196, 222));
 				bOther.setText("0");
-				bOther.setFont(new Font("Arial", Font.BOLD, 20));
+				bOther.setFont(new Font("Arial", Font.BOLD, (int)(frame.getWidth()/JambConstants.FONT_RATIO)));
 			}
 			bOther.setPreferredSize(new Dimension((int)(frame.getWidth()/JambConstants.BOX_WIDTH_RATIO), (int)(frame.getHeight()/JambConstants.BOX_HEIGHT_RATIO)));
 //			System.out.println(bOther.getWidth());
