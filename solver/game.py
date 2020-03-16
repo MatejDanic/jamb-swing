@@ -1,97 +1,70 @@
-from models import Dice, Paper
+from models import Form
+from actions import Roll, Write, Announce
+import random
 
-dice_set = []
+dice_set = [0, 0, 0, 0, 0]
+form = Form()
 
-for i in range(5):
-    dice_set.append(Dice())
+while True:
+    done = form.is_done()
+    if done:
+        break
+    ann_avail = form.is_ann_avail()
+    Roll(dice_set, 31)
+    dice_rolls = 1
+    announcement = None
+    while dice_rolls <= 3:
+        avail_boxes = form.get_avail_boxes(dice_rolls)
+        print(form)
+        print("Roll number: ", dice_rolls)
+        print(dice_set)
+        print(avail_boxes)
+        if announcement is not None:
+            avail_boxes.clear()
+            avail_boxes.append(announcement)
 
-# print(dice_set)
+        if dice_rolls == 1 and ann_avail:
+            while True:
+                # option = int(input("Enter option number (1 - roll dice, 2 - write down, 3 - announce):\n"))
+                option = random.randint(1, 3)
+                if 1 <= option <= 3:
+                    break
+        elif dice_rolls == 2 or not ann_avail:
+            while True:
+                # option = int(input("Enter option number (1 - roll dice, 2 - write down):\n"))
+                option = random.randint(1, 2)
+                if 1 <= option <= 2:
+                    break
+        elif dice_rolls == 3:
+            option = 2
 
-dice_throws = 0
+        if option == 1:
+            dice_rolls += 1
+            while True:
+                # dice_to_roll = int(input("Enter dice to roll (0-31):\n"))
+                dice_to_roll = random.randint(0, 31)
+                if 0 <= dice_to_roll <= 31:
+                    break
+            Roll(dice_set, dice_to_roll)
+            continue
+        elif option == 2:
+            while True:
+                # box_number = int(input("Enter box number:\n"))
+                box_number = random.choice(avail_boxes)
+                if box_number in avail_boxes:
+                    break
+            Write(form, dice_set, box_number)
+            break
+        elif option == 3:
+            avail_boxes = list(filter(lambda a: a >= 39, avail_boxes))
+            while True:
+                # announcement = int(input("Enter announcement box number"))
+                announcement = random.choice(avail_boxes)
+                if announcement in avail_boxes:
+                    break
+            Announce(form, announcement)
+            continue
 
-paper = Paper()
-print(paper)
+print(form)
+print(form.calculate_score())
 
-while dice_throws < 3:
-    print(dice_set)
-    option = input("Enter option number (1 - roll dice, 2 - keep dice, 3 - write down): ")
-    dice_results = [0, 0, 0, 0, 0]
-    if option == '1':
-        dice_throws += 1
-        for i, dice in enumerate(dice_set):
-            dice.roll()
-            dice_results[i] = dice.curr_num
-    elif option == '2':
-        keep_dice = '{:05b}'.format(int(input("Enter dice that you wish to keep: ")))
-        for i in range(keep_dice.__len__()):
-            dice_set[i].reserved = keep_dice[i] == '1'
-    elif option == '3':
-        print(paper.get_avail_boxes())
-        row_num, box_num = int(input("Enter row and box number: "))
-        paper.row_list[row_num].box_list[box_num].write(dice_results)
-        print(paper)
-
-
-# //
-# //		int diceThrows = 0;
-# //		String announcement = "";
-# //		Map<Integer, String> availBoxMap;
-# //		RowType rowType;
-# //		BoxType boxType;
-# //		while(diceThrows <= JambConstants.NUM_OF_ROLLS) {
-# //			int input = 0;
-# //			if (diceThrows == 0) {
-# //				input = InputChecker.checkInput(1, 1, "option number (1 - throw dice)");
-# //				//				input = 1;
-# //			} else if (diceThrows == 1 && announcement.isEmpty()) {
-# //				input = InputChecker.checkInput(1, 4, "option number (1 - throw dice, 2 - keep some dice, 3 - write down, 4 - announce)");
-# //				//				input = 3;
-# //			} else if (diceThrows == JambConstants.NUM_OF_ROLLS) {
-# //				input = InputChecker.checkInput(3, 3, "option number (3 - write down)");
-# //			} else {
-# //				input = InputChecker.checkInput(1, 3, "option number (1 - throw dice, 2 - keep some dice, 3 - write down");
-# //			}
-# //			switch (input) {
-# //			case 1:
-# //				//				throwDice();
-# //				diceThrows++;
-# //				break;
-# //			case 2:
-# //				System.out.println(diceList);
-# //				String diceForKeep = String.format("%5s", Integer.toBinaryString(InputChecker.checkInput(1, 31, "dice that you want to keep (select already kept dice to unkeep)"))
-# //						.replace(' ', '0'));
-# //				for (int i = 0; i < diceForKeep.length(); i++) {
-# //					if (diceForKeep.charAt(i) == '1') {
-# //						diceList.get(i).setReserved(!diceList.get(i).isReserved());
-# //					}
-# //				}
-# //				System.out.println(diceList);
-# //				break;
-# //			case 3:
-# //				System.out.println("\nAvailable boxes are:\n");
-# //				availBoxMap = paper.getAvailBoxMap(diceThrows, announcement);
-# //				for (Integer boxIndex : availBoxMap.keySet()) {
-# //					System.out.println(boxIndex + ". " + availBoxMap.get(boxIndex).toString());
-# //				}
-# //				input = InputChecker.checkInput(1, availBoxMap.size(), "index of box");
-# //				rowType = RowType.valueOf(availBoxMap.get(input).split(" ")[0]);
-# //				boxType = BoxType.valueOf(availBoxMap.get(input).split(" ")[1]);
-# //				paper.getRow(rowType).writeDown(diceList, boxType.ordinal());
-# //				System.out.println(paper);
-# //				return;
-# //			case 4:
-# //				System.out.println("\nAvailable announcements are:\n");
-# //				announcement = "ANNOUNCE";
-# //				availBoxMap = paper.getAvailBoxMap(diceThrows, announcement);
-# //				for (Integer boxIndex : availBoxMap.keySet()) {
-# //					System.out.println(boxIndex + ". " + availBoxMap.get(boxIndex).toString());
-# //				}
-# //				System.out.println(diceList);
-# //				input = InputChecker.checkInput(1, availBoxMap.size(), "index of announcement");
-# //				announcement += " " + BoxType.valueOf(availBoxMap.get(input).split(" ")[1]);
-# //				break;
-# //			}
-# //		}
-# //
-# //		System.out.println("\n");
-# //	}
