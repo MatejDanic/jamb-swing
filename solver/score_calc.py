@@ -15,12 +15,16 @@ def get_score(dice_set, box_num):
                 break
 
     elif box_num == 9:
-        list1 = [1, 2, 3, 4, 5]
-        list2 = [2, 3, 4, 5, 6]
-        if all(elem in dice_set for elem in list1):
-            score = 35
-        elif all(elem in dice_set for elem in list2):
-            score = 45
+        has_straight = True
+        straight = [2, 3, 4, 5]
+        for n in straight:
+            if n not in dice_set:
+                has_straight = False
+        if has_straight:
+            if 1 in dice_set:
+                score = 35
+            elif 6 in dice_set:
+                score = 45
 
     elif box_num == 10:
         found_pair = False

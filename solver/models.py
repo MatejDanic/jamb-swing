@@ -1,4 +1,7 @@
+import itertools
+
 from score_calc import get_score
+import random
 
 
 class Form:
@@ -66,13 +69,16 @@ class Form:
         for i in range(4):
             upper_score = 0
             for j in range(6):
-                upper_score += self.form[i][j]
+                upper_score += self.form[i][j] if self.form[i][j] is not None else 0
             if upper_score >= 60:
                 upper_score += 30
-            middle_score = (self.form[i][6] - self.form[i][7]) * self.form[i][0]
+            if self.form[i][6] is not None and self.form[i][7] is not None and self.form[i][0] is not None:
+                middle_score = (self.form[i][6] - self.form[i][7]) * self.form[i][0]
+            else:
+                middle_score = 0
             lower_score = 0
             for j in range(5):
-                lower_score += self.form[i][j + 8]
+                lower_score += self.form[i][j + 8] if self.form[i][j + 8] is not None else 0
             score += upper_score + middle_score + lower_score
         return score
 
@@ -80,6 +86,17 @@ class Form:
         for i in range(4):
             for j in range(13):
                 if self.form[i][j] is None:
-                    print("nije gotov: ", i, j)
                     return False
         return True
+
+
+def roll_dice(dice_set, dice_to_roll):
+    dice_to_roll = '{:05b}'.format(int(dice_to_roll))
+    for i in range(len(dice_set)):
+        if dice_to_roll[i] == '1':
+            dice_set[i] = random.randint(1, 6)
+
+
+def get_all_rolls():
+    dice = [1, 2, 3, 4, 5, 6]
+    return list(itertools.combinations_with_replacement(dice, 5))
