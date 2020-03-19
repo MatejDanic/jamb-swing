@@ -1,75 +1,78 @@
 <!DOCTYPE html>
+
 <html>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+
 <head>
-<link rel="stylesheet" type="text/css" href="../static/game.css">
-<script src="../static/game.js"></script>
+<link rel="stylesheet" type="text/css" href="../static/Game.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="../static/Game.js"></script>
 </head>
 
-<header>
-	<button class="dice-button"></button>
-	<button class="dice-button"></button>
-	<button class="dice-button"></button>
-	<button class="dice-button"></button>
-	<button class="dice-button"></button>
+<header class="header">
+	<button class="dice-button" id="dice1" onClick="reply_click(this.id)"></button>
+	<button class="dice-button" id="dice2" onClick="reply_click(this.id)"></button>
+	<button class="dice-button" id="dice3" onClick="reply_click(this.id)"></button>
+	<button class="dice-button" id="dice4" onClick="reply_click(this.id)"></button>
+	<button class="dice-button" id="dice5" onClick="reply_click(this.id)"></button>
 </header>
 
 <div class="button-container">
-	<button class="button" id="roll-dice">BACI KOCKE</button>
+	<button class="button" id="roll-dice" onClick="roll_dice(0)">BACI KOCKE</button>
 	<button class="button" id="announce">NAJAVI</button>
 </div>
 
-
 <div class="grid-container">
 	<div class="empty-item"></div>
-	<div class="label-white">down</div>
-	<div class="label-white">up</div>
-	<div class="label-white">any</div>
-	<div class="label-white">ann</div>
+	<div class="label-icon"><img src="../static/images/box/7.bmp"></div>
+	<div class="label-icon"><img src="../static/images/box/8.bmp"></div>
+	<div class="label-icon"><img src="../static/images/box/9.bmp"></div>
+	<div class="label-white">NAJAVA</div>
 	<div class="empty-item"></div>
 
-	<div class="label-white">1</div>
-	<button class="grid-item"></button>
-	<button class="grid-item"></button>
-	<button class="grid-item"></button>
-	<button class="grid-item"></button>
-	<div class="empty-item"></div>
-
-	<div class="label-white">2</div>
+	<div class="label-icon"><img src="../static/images/box/1.bmp"></div>
 	<button class="grid-item"></button>
 	<button class="grid-item"></button>
 	<button class="grid-item"></button>
 	<button class="grid-item"></button>
 	<div class="empty-item"></div>
 
-	<div class="label-white">3</div>
+	<div class="label-icon"><img src="../static/images/box/2.bmp"></div>
 	<button class="grid-item"></button>
 	<button class="grid-item"></button>
 	<button class="grid-item"></button>
 	<button class="grid-item"></button>
 	<div class="empty-item"></div>
 
-	<div class="label-white">4</div>
+	<div class="label-icon"><img src="../static/images/box/3.bmp"></div>
 	<button class="grid-item"></button>
 	<button class="grid-item"></button>
 	<button class="grid-item"></button>
 	<button class="grid-item"></button>
 	<div class="empty-item"></div>
 
-	<div class="label-white">5</div>
+	<div class="label-icon"><img src="../static/images/box/4.bmp"></div>
 	<button class="grid-item"></button>
 	<button class="grid-item"></button>
 	<button class="grid-item"></button>
 	<button class="grid-item"></button>
 	<div class="empty-item"></div>
 
-	<div class="label-white">6</div>
+	<div class="label-icon"><img src="../static/images/box/5.bmp"></div>
 	<button class="grid-item"></button>
 	<button class="grid-item"></button>
 	<button class="grid-item"></button>
 	<button class="grid-item"></button>
 	<div class="empty-item"></div>
 
-	<div class="label-gray">Σ</div>
+	<div class="label-icon"><img src="../static/images/box/6.bmp"></div>
+	<button class="grid-item"></button>
+	<button class="grid-item"></button>
+	<button class="grid-item"></button>
+	<button class="grid-item"></button>
+	<div class="empty-item"></div>
+
+	<div class="label-gray">SUM</div>
 	<div class="score"></div>
 	<div class="score"></div>
 	<div class="score"></div>
@@ -90,7 +93,7 @@
 	<button class="grid-item"></button>
 	<div class="empty-item"></div>
 
-	<div class="label-gray">Σ</div>
+	<div class="label-gray">SUM</div>
 	<div class="score"></div>
 	<div class="score"></div>
 	<div class="score"></div>
@@ -132,7 +135,7 @@
 	<button class="grid-item"></button>
 	<div class="empty-item"></div>
 
-	<div class="label-gray">Σ</div>
+	<div class="label-gray">SUM</div>
 	<div class="score"></div>
 	<div class="score"></div>
 	<div class="score"></div>
@@ -145,8 +148,4 @@
 	<div class="empty-item"></div>
 	<div class="final-score"></div>
 </div>
-
-
-
-</asside>
 </html>
