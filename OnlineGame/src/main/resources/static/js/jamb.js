@@ -199,7 +199,6 @@ function rollDice() {
 	}
 
 	toggleButtons();
-	endGame();
 }
 
 
@@ -362,7 +361,7 @@ function endGame() {
 	person = prompt("Molimo unesite vase ime:", "Matej");
 	if (person != null && person != "") {
 		var http = new XMLHttpRequest();
-		var url = 'https://jamb-remote.herokuapp/scores';
+		var url = 'https://jamb-remote.herokuapp.com/scores';
 		var params = JSON.stringify({"name": person, "value": parseInt(scores[15].value, 10), "date": Date.now()});
 		http.open('POST', url, true);
 		http.setRequestHeader('Content-type', 'application/json');
