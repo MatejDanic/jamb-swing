@@ -317,13 +317,10 @@ function getScore(boxNum) {
 }
 
 function calculateSums() {
-	var array = [];
-	for (var i = 0; i < scores.length; i++) {
-		array.push(parseInt(scores[i].value, 10));
-	}
+	var array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 	for (var i = 0; i < 4; i++) {
 		for (var j = 0; j < 6; j++) {
-//			console.log(i*13+j, parseInt(gridItems[i*13+j].value, 10));
+			console.log(i*13+j, parseInt(gridItems[i*13+j].value, 10));
 			array[i] += parseInt(gridItems[i*13+j].value, 10);
 		}
 		if (array[i] >= 60 ) {
@@ -339,9 +336,9 @@ function calculateSums() {
 	}
 	for (var i = 0; i < 3; i++) {
 		for (var j = 0; j < 4; j++) {
-			array[i*5+4] += array[i*5+j]
+			array[i*5+4] += scores[i*5+j].value;
 		}
-		array[15] += array[i*5+4];
+		array[15] += scores[i*5+4].value;
 	}
 	for (var i = 0; i < scores.length; i++) {
 		scores[i].innerHTML = array[i];
