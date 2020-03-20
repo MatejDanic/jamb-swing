@@ -17,7 +17,7 @@ window.onload = function () {
 	counter = 0;
 
 	for (var i = 0; i < diceButtons.length; i++) {
-		diceButtons[i].style.backgroundColor = "rgb(169, 169, 169)";
+		diceButtons[i].style.backgroundColor = "rgb(220, 220, 220)";
 		diceButtons[i].innerHTML = '<img src="../images/dice/1.bmp">';
 		diceButtons[i].value = 1;
 		diceButtons[i].disabled = true;
@@ -56,10 +56,10 @@ window.onload = function () {
 function replyClick(id)
 {
 	var elem = document.getElementById(id);
-	if (elem.style.backgroundColor == "rgb(169, 169, 169)") {
-		elem.style.backgroundColor = "rgb(134, 134, 134)";
+	if (elem.style.backgroundColor == "rgb(220, 220, 220)") {
+		elem.style.backgroundColor = "rgb(105, 105, 105)";
 	} else {
-		elem.style.backgroundColor = "rgb(169, 169, 169)";
+		elem.style.backgroundColor = "rgb(220, 220, 220)";
 	}
 }
 
@@ -70,6 +70,7 @@ function writeDown(id) {
 //				console.log(j);
 				if (i==3 && announcement == -1) {
 					announce(id);
+					rollDiceButton.disabled = false;
 				} else {
 					document.getElementById(id).style.border = "1px solid black";
 					announcement = -1;
@@ -121,6 +122,13 @@ function announce(id) {
 }
 
 function toggleButtons() {
+	var onlyAnnouncementLeft=true;
+	for (var i = 0; i < 39; i++) {
+		if (!gridItems[i].written){
+			onlyAnnouncementLeft=false;
+			break;
+		}
+	}
 
 	if (diceRolls == 0) {
 		rollDiceButton.disabled = false;
@@ -130,7 +138,7 @@ function toggleButtons() {
 			for (var j = 0; j < diceButtons.length; j++) {
 //				console.log(j)
 				diceButtons[j].disabled = true;
-				diceButtons[j].style.backgroundColor = "rgb(169, 169, 169)";
+				diceButtons[j].style.backgroundColor = "rgb(220, 220, 220)";
 
 			}
 		}
@@ -143,6 +151,9 @@ function toggleButtons() {
 		}
 		for (var i = 0; i < diceButtons.length; i++) {
 			diceButtons[i].disabled = false;
+		}
+		if (onlyAnnouncementLeft) {
+			rollDiceButton.disabled = true;
 		}
 	} else if (diceRolls == 2) {
 		for(var i = 39; i < 52; i++) {
@@ -174,7 +185,7 @@ function rollDice() {
 	diceRolls++;
 
 	for (var i = 0; i < diceButtons.length; i++) {
-		if (diceButtons[i].style.backgroundColor == "rgb(169, 169, 169)") {
+		if (diceButtons[i].style.backgroundColor == "rgb(220, 220, 220)") {
 			number = Math.floor(Math.random() * (7 - 1) ) + 1;
 			$(diceButtons[i]).animateRotate(360, {
 				duration: 700,
@@ -188,6 +199,7 @@ function rollDice() {
 	}
 
 	toggleButtons();
+	endGame();
 }
 
 
@@ -317,10 +329,10 @@ function getScore(boxNum) {
 }
 
 function calculateSums() {
-	var array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+	var array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 	for (var i = 0; i < 4; i++) {
 		for (var j = 0; j < 6; j++) {
-			console.log(i*13+j, parseInt(gridItems[i*13+j].value, 10));
+//			console.log(i*13+j, parseInt(gridItems[i*13+j].value, 10));
 			array[i] += parseInt(gridItems[i*13+j].value, 10);
 		}
 		if (array[i] >= 60 ) {
@@ -336,9 +348,9 @@ function calculateSums() {
 	}
 	for (var i = 0; i < 3; i++) {
 		for (var j = 0; j < 4; j++) {
-			array[i*5+4] += scores[i*5+j].value;
+			array[i*5+4] += array[i*5+j];
 		}
-		array[15] += scores[i*5+4].value;
+		array[15] += array[i*5+4];
 	}
 	for (var i = 0; i < scores.length; i++) {
 		scores[i].innerHTML = array[i];

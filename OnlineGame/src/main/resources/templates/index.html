@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 
 <html>
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1"/>
+<meta name="viewport" content="height=device-height, initial-scale=1, minimum-scale=1"/>
 
 
 <head>
-<link rel="stylesheet" type="text/css" th:href="@{css/Game.css}">
+<link rel="stylesheet" type="text/css" th:href="@{css/jamb.css}">
 <link rel="shortcut icon" href="#" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <!-- <script src="../static/Game.js"></script> -->
-<script type="text/javascript" th:src="@{js/game.js}"></script>
+<script type="text/javascript" th:src="@{js/jamb.js}"></script>
 </head>
 
 <header class="header">
@@ -27,48 +28,48 @@
 
 <div class="grid-container">
 	<div class="empty-item"></div>
-	<div class="label-icon"><img th:src="@{/images/box/7.bmp}"></div>
-	<div class="label-icon"><img th:src="@{/images/box/8.bmp}"></div>
-	<div class="label-icon"><img th:src="@{/images/box/9.bmp}"></div>
-	<button class="label-white">NAJAVA</button>
+	<div><img class="image" th:src="@{/images/box/7.bmp}"></div>
+	<div><img class="image" th:src="@{/images/box/8.bmp}"></div>
+	<div><img class="image" th:src="@{/images/box/9.bmp}"></div>
+	<button class="label-ann">NAJAVA</button>
 	<div class="empty-item"></div>
 
-	<div class="label-icon"><img th:src="@{/images/box/1.bmp}"></div>
+	<div><img class="image" th:src="@{/images/box/1.bmp}"></div>
 	<button class="grid-item" id="0" onClick="writeDown(this.id)"></button>
 	<button class="grid-item" id="13" onClick="writeDown(this.id)"></button>
 	<button class="grid-item" id="26" onClick="writeDown(this.id)"></button>
 	<button class="grid-item" id="39" onClick="writeDown(this.id)"></button>
 	<div class="empty-item"></div>
 
-	<div class="label-icon"><img th:src="@{/images/box/2.bmp}"></div>
+	<div><img class="image" th:src="@{/images/box/2.bmp}"></div>
 	<button class="grid-item" id="1" onClick="writeDown(this.id)"></button>
 	<button class="grid-item" id="14" onClick="writeDown(this.id)"></button>
 	<button class="grid-item" id="27" onClick="writeDown(this.id)"></button>
 	<button class="grid-item" id="40" onClick="writeDown(this.id)"></button>
 	<div class="empty-item"></div>
 
-	<div class="label-icon"><img th:src="@{/images/box/3.bmp}"></div>
+	<div><img class="image" th:src="@{/images/box/3.bmp}"></div>
 	<button class="grid-item" id="2" onClick="writeDown(this.id)"></button>
 	<button class="grid-item" id="15" onClick="writeDown(this.id)"></button>
 	<button class="grid-item" id="28" onClick="writeDown(this.id)"></button>
 	<button class="grid-item" id="41" onClick="writeDown(this.id)"></button>
 	<div class="empty-item"></div>
 
-	<div class="label-icon"><img th:src="@{/images/box/4.bmp}"></div>
+	<div><img class="image" th:src="@{/images/box/4.bmp}"></div>
 	<button class="grid-item" id="3" onClick="writeDown(this.id)"></button>
 	<button class="grid-item" id="16" onClick="writeDown(this.id)"></button>
 	<button class="grid-item" id="29" onClick="writeDown(this.id)"></button>
 	<button class="grid-item" id="42" onClick="writeDown(this.id)"></button>
 	<div class="empty-item"></div>
 
-	<div class="label-icon"><img th:src="@{/images/box/5.bmp}"></div>
+	<div><img class="image" th:src="@{/images/box/5.bmp}"></div>
 	<button class="grid-item" id="4" onClick="writeDown(this.id)"></button>
 	<button class="grid-item" id="17" onClick="writeDown(this.id)"></button>
 	<button class="grid-item" id="30" onClick="writeDown(this.id)"></button>
 	<button class="grid-item" id="43" onClick="writeDown(this.id)"></button>
 	<div class="empty-item"></div>
 
-	<div class="label-icon"><img th:src="@{/images/box/6.bmp}"></div>
+	<div><img class="image" th:src="@{/images/box/6.bmp}"></div>
 	<button class="grid-item" id="5" onClick="writeDown(this.id)"></button>
 	<button class="grid-item" id="18" onClick="writeDown(this.id)"></button>
 	<button class="grid-item" id="31" onClick="writeDown(this.id)"></button>
@@ -149,6 +150,6 @@
 	<div class="empty-item"></div>
 	<div class="empty-item"></div>
 	<div class="empty-item"></div>
-	<div class="final-score" id="final"></div>
+	<div class="score-final" id="final"></div>
 </div>
 </html>
