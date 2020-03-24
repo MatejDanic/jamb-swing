@@ -5,6 +5,7 @@ var gridItems;
 var scores;
 var announcement;
 var counter;
+var scoreId;
 
 window.onload = function () {
 	diceRolls = 0;
@@ -51,6 +52,7 @@ window.onload = function () {
 	scores.push(document.getElementById("final"));
 	scores[15].value = 0;
 	initializeGrid();
+	recordGame();
 }
 
 function replyClick(id)
@@ -358,7 +360,24 @@ function calculateSums() {
 }
 
 function endGame() {
-	person = prompt("Molimo unesite vase ime:", "Matej");
+	var xmlHttp = new XMLHttpRequest();
+	chargeURLPut('https://jamb-remote.herokuapp.com/scores/'+scoreId);
+
+	function chargeURLPut(url) { 
+		var mimeType = "text/plain";  
+		xmlHttp.open('PUT', url, true);
+		xmlHttp.setRequestHeader('Content-Type', mimeType);  
+		xmlHttp.send(scores[15].value); 
+	}
+
+	var txt;
+	if (confirm("Cestitamo, vas rezultat je " + scores[15].value + "\nZapocni novu igru?")) {
+		location.reload();
+	}
+}
+
+function recordGame() {
+	person = prompt("Molimo unesite vase ime:");
 	if (person != null && person != "") {
 		var http = new XMLHttpRequest();
 		var url = 'https://jamb-remote.herokuapp.com/scores';
@@ -368,11 +387,72 @@ function endGame() {
 
 		http.onreadystatechange = function() {
 			if(http.readyState == 4 && http.status == 200) {
-				alert(http.responseText);
+				scoreId = http.responseText;
 			}
 		}
-		console.log(params);
+//		console.log(params);
 		http.send(params);
 	}
-	location.reload();
+
+}
+
+function showRules() {
+	alert("Bacanjem kockica postižu se odredeni rezultati koji se upisuju u obrazac. Na kraju igre postignuti se rezultati zbrajaju.\n" +
+			"Nakon prvog bacanja, igrac gleda u obrazac i odlucuje hoce li nešto odmah upisati ili ce igrati dalje.\n" +
+			"U jednom potezu igrac može kockice (sve ili samo one koje izabere) bacati tri puta\n" +
+			"Prvi stupac obrasca upisuje se odozgo prema dolje, a drugom obrnuto. U treci stupac rezultati se upisuju bez odredenog redosljeda.\n" +
+			"Cetvrti stupac mora se popunjavati tako da se nakon prvog bacanja najavljuje igra za odredeni rezultat.\n" +
+			"Igrac je obavezan u to polje upisati ostvareni rezultat bez obzira da li mu to nakon tri bacanja odgovara ili ne.\n" +
+	"Rezultat se može, ali ne mora upisati u cetvrti stupac nakon prvog bacanja.");
+}
+
+function showLeaderboard() {
+	var http = new XMLHttpRequest();
+	var url = 'https://jamb-remote.herokuapp.com/scores/leaderboard';
+	http.open('GET', url, true);
+
+	http.onreadystatechange = function() {
+		if(http.readyState == 4 && http.status == 200) {
+
+//			console.log(http.responseText)
+			var response = JSON.parse(http.responseText);
+//			console.log(response)
+			var text = "";
+			for (var i = 0; i < response.length; i++){
+				var obj = response[i];
+//				console.log(obj);
+				text += (i+1) + ". " + obj.value + " - " + obj.name + "\n";
+			}
+			alert("Danasnji najbolji rezultati:\n" + text);
+		}
+	}
+	http.send();
+}
+
+function showAllScores() {
+	var http = new XMLHttpRequest();
+	const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+	var url = 'https://jamb-remote.herokuapp.com/scores';
+	http.open('GET', url, true);
+
+	http.onreadystatechange = function() {
+		if(http.readyState == 4 && http.status == 200) {
+
+//			console.log(http.responseText)
+			var response = JSON.parse(http.responseText);
+//			console.log(response)
+			var text = "";
+			for (var i = 0; i < response.length; i++){
+				var obj = response[i];
+//				console.log(obj);
+				if (obj.finished == true) {
+					var date = new Date(obj.date)
+					
+					text += obj.name + " (" + date.toLocaleDateString() + ") -" + obj.value + "\n";
+				}
+			}
+			alert(text);
+		}
+	}
+	http.send();
 }

@@ -20,6 +20,8 @@ public class Score {
 	private int value;
 	@Column
 	private Date date;
+	@Column
+	private boolean finished;
 	
 	public int getId() {
 		return id;
@@ -45,5 +47,10 @@ public class Score {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	
+	public boolean isFinished() {
+		return finished;
+	}
+	public void setFinished(boolean finished) {
+		this.finished = finished;
+	}
 }
